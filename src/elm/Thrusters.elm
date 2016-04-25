@@ -3,61 +3,74 @@ module Thrusters where
 import Types exposing (Ship)
 
 weakPower : Float
-weakPower = 0.2
+weakPower = 0.1
 
 mainPower : Float
-mainPower = weakPower * 15
+mainPower = weakPower * 5
+
+-- How much should the craft
+-- rotate relative to 
+-- how much its being thrust
+-- in the cardinal directions
+rtc : Float
+rtc = 0.5
+
+boost : Bool -> Float
+boost b =
+  if b then 10 else 1
 
 
 deltaY : Ship -> Float
 deltaY s = 
   let
-    t    = s.thrusters
-    cos' = cos <| degrees s.a
-    sin' = sin <| degrees s.a
-
-    main = mainPower  * cos' * toFloat t.main
-    lb   = weakPower  * cos' * toFloat t.leftBack
-    lf   = -weakPower * cos' * toFloat t.leftFront
-    rb   = weakPower  * cos' * toFloat t.rightBack
-    rf   = -weakPower * cos' * toFloat t.rightFront
-    ls   = -weakPower * sin' * toFloat t.leftSide
-    rs   = weakPower  * sin' * toFloat t.rightSide
-
+    t  = s.thrusters
+    c' = cos (degrees s.a)
+    s' = sin (degrees s.a)
+    tf = toFloat
   in
-    ls + lb + lf + main + rf + rb + rs
+    ( (  mainPower * c' * tf t.main)       -- Main
+    + (  weakPower * c' * tf t.leftBack)   -- left back
+    + ( -weakPower * c' * tf t.leftFront)  -- left front
+    + (  weakPower * c' * tf t.rightBack)  -- right back
+    + ( -weakPower * c' * tf t.rightFront) -- right front
+    + ( -weakPower * s' * tf t.leftSide)   -- left side
+    + (  weakPower * s' * tf t.rightSide)  -- right side
+    ) * boost t.boost
 
 
 
 deltaX : Ship -> Float
 deltaX s = 
   let
-    t    = s.thrusters
-    cos' = cos <| degrees s.a
-    sin' = sin <| degrees s.a
-
-    main = -mainPower * sin' * toFloat t.main
-    lb   = -weakPower * sin' * toFloat t.leftBack
-    lf   = weakPower  * sin' * toFloat t.leftFront
-    rb   = -weakPower * sin' * toFloat t.rightBack
-    rf   = weakPower  * sin' * toFloat t.rightFront
-    ls   = -weakPower * cos' * toFloat t.leftSide
-    rs   = weakPower  * cos' * toFloat t.rightSide
-
+    t  = s.thrusters
+    c' = cos (degrees s.a)
+    s' = sin (degrees s.a)
+    tf = toFloat
   in
-    ls + lb + lf + main + rf + rb + rs
+    ( ( -mainPower * s' * tf t.main)       -- Main
+    + ( -weakPower * s' * tf t.leftBack)   -- left back
+    + (  weakPower * s' * tf t.leftFront)  -- left front
+    + ( -weakPower * s' * tf t.rightBack)  -- right back
+    + (  weakPower * s' * tf t.rightFront) -- right front
+    + ( -weakPower * c' * tf t.leftSide)   -- left side
+    + (  weakPower * c' * tf t.rightSide)  -- right side
+    ) * boost t.boost
 
 
 
 deltaAngular : Ship -> Float
 deltaAngular s =
   let 
-    t  = s.thrusters
-
-    lb = -weakPower * 0.8 * toFloat t.leftBack
-    lf = weakPower  * 0.8 * toFloat t.leftFront
-    rb = weakPower  * 0.8 * toFloat t.rightBack
-    rf = -weakPower * 0.8 * toFloat t.rightFront
-
+    t = s.thrusters
   in
-    lb + lf + rb + rf 
+    ( ( -weakPower * rtc * toFloat t.leftBack)
+    + (  weakPower * rtc * toFloat t.leftFront)
+    + (  weakPower * rtc * toFloat t.rightBack)
+    + ( -weakPower * rtc * toFloat t.rightFront)
+    ) * boost t.boost
+
+
+
+
+
+

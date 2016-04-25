@@ -9,3 +9,4 @@ k = 75
 n = 78
 
 space = 32
+shift = 16

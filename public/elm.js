@@ -7319,8 +7319,17 @@ Elm.Types.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var Ship = F7(function (a,b,c,d,e,f,g) {    return {x: a,y: b,a: c,vx: d,vy: e,va: f,thrusters: g};});
-   return _elm.Types.values = {_op: _op,Ship: Ship};
+   var frege = {x: 0
+               ,y: 0
+               ,a: 15
+               ,vx: 0
+               ,vy: 0
+               ,va: -0.1
+               ,tileX: 0
+               ,tileY: 0
+               ,thrusters: {leftFront: 0,leftSide: 0,leftBack: 0,main: 0,rightFront: 0,rightSide: 0,rightBack: 0,boost: false}};
+   var Ship = F9(function (a,b,c,d,e,f,g,h,i) {    return {x: a,y: b,a: c,vx: d,vy: e,va: f,tileX: g,tileY: h,thrusters: i};});
+   return _elm.Types.values = {_op: _op,Ship: Ship,frege: frege};
 };
 Elm.DrawLander = Elm.DrawLander || {};
 Elm.DrawLander.make = function (_elm) {
@@ -7340,34 +7349,38 @@ Elm.DrawLander.make = function (_elm) {
    $Types = Elm.Types.make(_elm);
    var _op = {};
    var imager = F3(function (w,h,str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,w,h,str));});
-   var src = function (str) {    return A2($Basics._op["++"],$Root.root,A2($Basics._op["++"],str,".png"));};
    var drawLander = function (s) {
-      var lander = _U.list([A3(imager,47,48,src("darkened-lander"))]);
-      var sides$ = function (i) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,i));};
+      var lander = _U.list([A3(imager,47,48,"./darkened-lander.png")]);
+      var strafer = function (i) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,i));};
       var sides = function (i) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,i));};
       var t = s.thrusters;
-      var mainThruster = _U.eq(t.main,1) ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: 0,_1: -32},
-      A3(imager,12,33,src("blast_main")))]) : _U.list([]);
-      var leftFront = _U.eq(t.leftFront,1) ? _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -19,_1: 9},sides(src("blast_yaw")))]) : _U.list([]);
-      var leftBack = _U.eq(t.leftBack,1) ? _U.list([A2($Graphics$Collage.move,
+      var mainThruster = _U.cmp(t.main,1) > -1 ? _U.list([A2($Graphics$Collage.move,
+      {ctor: "_Tuple2",_0: 0,_1: -30},
+      A3(imager,11,30,"./blast_main-weak.png"))]) : _U.list([]);
+      var leftFront = _U.cmp(t.leftFront,1) > -1 ? _U.list([A2($Graphics$Collage.move,
+      {ctor: "_Tuple2",_0: -19,_1: 9},
+      sides("./blast_yaw-weak.png"))]) : _U.list([]);
+      var leftBack = _U.cmp(t.leftBack,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: -19,_1: -9},
-      A2($Graphics$Collage.scale,-1,sides(src("blast_yaw_f"))))]) : _U.list([]);
-      var leftSide = _U.eq(t.leftSide,1) ? _U.list([A2($Graphics$Collage.move,
+      A2($Graphics$Collage.scale,-1,sides("./blast_yaw_f-weak.png")))]) : _U.list([]);
+      var leftSide = _U.cmp(t.leftSide,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 25,_1: -1},
-      A2($Graphics$Collage.rotate,$Basics.degrees(180),sides$(src("blast_strafe"))))]) : _U.list([]);
-      var rightSide = _U.eq(t.rightSide,1) ? _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -25,_1: -1},sides$(src("blast_strafe")))]) : _U.list([]);
-      var rightFront = _U.eq(t.rightFront,1) ? _U.list([A2($Graphics$Collage.move,
+      A2($Graphics$Collage.rotate,$Basics.degrees(180),strafer("./blast_strafe-weak.png")))]) : _U.list([]);
+      var rightSide = _U.cmp(t.rightSide,1) > -1 ? _U.list([A2($Graphics$Collage.move,
+      {ctor: "_Tuple2",_0: -25,_1: -1},
+      strafer("./blast_strafe-weak.png"))]) : _U.list([]);
+      var rightFront = _U.cmp(t.rightFront,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 19,_1: 9},
-      A2($Graphics$Collage.rotate,$Basics.degrees(180),A2($Graphics$Collage.scale,-1,sides(src("blast_yaw_f")))))]) : _U.list([]);
-      var rightBack = _U.eq(t.rightBack,1) ? _U.list([A2($Graphics$Collage.move,
+      A2($Graphics$Collage.rotate,$Basics.degrees(180),A2($Graphics$Collage.scale,-1,sides("./blast_yaw_f-weak.png"))))]) : _U.list([]);
+      var rightBack = _U.cmp(t.rightBack,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 19,_1: -9},
-      A2($Graphics$Collage.rotate,$Basics.degrees(180),sides(src("blast_yaw"))))]) : _U.list([]);
+      A2($Graphics$Collage.rotate,$Basics.degrees(180),sides("./blast_yaw-weak.png")))]) : _U.list([]);
       return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
       138,
       138,
       A3($List.foldr,$List.append,_U.list([]),_U.list([rightSide,leftSide,rightBack,leftBack,rightFront,leftFront,mainThruster,lander]))));
    };
+   var src = function (str) {    return A2($Basics._op["++"],$Root.root,A2($Basics._op["++"],str,".png"));};
    return _elm.DrawLander.values = {_op: _op,src: src,imager: imager,drawLander: drawLander};
 };
 Elm.KeyCodes = Elm.KeyCodes || {};
@@ -7383,6 +7396,7 @@ Elm.KeyCodes.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var shift = 16;
    var space = 32;
    var n = 78;
    var k = 75;
@@ -7390,7 +7404,7 @@ Elm.KeyCodes.make = function (_elm) {
    var c = 67;
    var s = 83;
    var e = 69;
-   return _elm.KeyCodes.values = {_op: _op,e: e,s: s,c: c,u: u,k: k,n: n,space: space};
+   return _elm.KeyCodes.values = {_op: _op,e: e,s: s,c: c,u: u,k: k,n: n,space: space,shift: shift};
 };
 Elm.Thrusters = Elm.Thrusters || {};
 Elm.Thrusters.make = function (_elm) {
@@ -7406,43 +7420,36 @@ Elm.Thrusters.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
-   var weakPower = 0.2;
-   var mainPower = weakPower * 15;
+   var boost = function (b) {    return b ? 10 : 1;};
+   var rtc = 0.5;
+   var weakPower = 0.1;
+   var mainPower = weakPower * 5;
    var deltaY = function (s) {
-      var sin$ = $Basics.sin($Basics.degrees(s.a));
-      var cos$ = $Basics.cos($Basics.degrees(s.a));
+      var tf = $Basics.toFloat;
+      var s$ = $Basics.sin($Basics.degrees(s.a));
+      var c$ = $Basics.cos($Basics.degrees(s.a));
       var t = s.thrusters;
-      var main = mainPower * cos$ * $Basics.toFloat(t.main);
-      var lb = weakPower * cos$ * $Basics.toFloat(t.leftBack);
-      var lf = (0 - weakPower) * cos$ * $Basics.toFloat(t.leftFront);
-      var rb = weakPower * cos$ * $Basics.toFloat(t.rightBack);
-      var rf = (0 - weakPower) * cos$ * $Basics.toFloat(t.rightFront);
-      var ls = (0 - weakPower) * sin$ * $Basics.toFloat(t.leftSide);
-      var rs = weakPower * sin$ * $Basics.toFloat(t.rightSide);
-      return ls + lb + lf + main + rf + rb + rs;
+      return (mainPower * c$ * tf(t.main) + weakPower * c$ * tf(t.leftBack) + (0 - weakPower) * c$ * tf(t.leftFront) + weakPower * c$ * tf(t.rightBack) + (0 - weakPower) * c$ * tf(t.rightFront) + (0 - weakPower) * s$ * tf(t.leftSide) + weakPower * s$ * tf(t.rightSide)) * boost(t.boost);
    };
    var deltaX = function (s) {
-      var sin$ = $Basics.sin($Basics.degrees(s.a));
-      var cos$ = $Basics.cos($Basics.degrees(s.a));
+      var tf = $Basics.toFloat;
+      var s$ = $Basics.sin($Basics.degrees(s.a));
+      var c$ = $Basics.cos($Basics.degrees(s.a));
       var t = s.thrusters;
-      var main = (0 - mainPower) * sin$ * $Basics.toFloat(t.main);
-      var lb = (0 - weakPower) * sin$ * $Basics.toFloat(t.leftBack);
-      var lf = weakPower * sin$ * $Basics.toFloat(t.leftFront);
-      var rb = (0 - weakPower) * sin$ * $Basics.toFloat(t.rightBack);
-      var rf = weakPower * sin$ * $Basics.toFloat(t.rightFront);
-      var ls = (0 - weakPower) * cos$ * $Basics.toFloat(t.leftSide);
-      var rs = weakPower * cos$ * $Basics.toFloat(t.rightSide);
-      return ls + lb + lf + main + rf + rb + rs;
+      return ((0 - mainPower) * s$ * tf(t.main) + (0 - weakPower) * s$ * tf(t.leftBack) + weakPower * s$ * tf(t.leftFront) + (0 - weakPower) * s$ * tf(t.rightBack) + weakPower * s$ * tf(t.rightFront) + (0 - weakPower) * c$ * tf(t.leftSide) + weakPower * c$ * tf(t.rightSide)) * boost(t.boost);
    };
    var deltaAngular = function (s) {
       var t = s.thrusters;
-      var lb = (0 - weakPower) * 0.8 * $Basics.toFloat(t.leftBack);
-      var lf = weakPower * 0.8 * $Basics.toFloat(t.leftFront);
-      var rb = weakPower * 0.8 * $Basics.toFloat(t.rightBack);
-      var rf = (0 - weakPower) * 0.8 * $Basics.toFloat(t.rightFront);
-      return lb + lf + rb + rf;
+      return ((0 - weakPower) * rtc * $Basics.toFloat(t.leftBack) + weakPower * rtc * $Basics.toFloat(t.leftFront) + weakPower * rtc * $Basics.toFloat(t.rightBack) + (0 - weakPower) * rtc * $Basics.toFloat(t.rightFront)) * boost(t.boost);
    };
-   return _elm.Thrusters.values = {_op: _op,weakPower: weakPower,mainPower: mainPower,deltaY: deltaY,deltaX: deltaX,deltaAngular: deltaAngular};
+   return _elm.Thrusters.values = {_op: _op
+                                  ,weakPower: weakPower
+                                  ,mainPower: mainPower
+                                  ,rtc: rtc
+                                  ,boost: boost
+                                  ,deltaY: deltaY
+                                  ,deltaX: deltaX
+                                  ,deltaAngular: deltaAngular};
 };
 Elm.View = Elm.View || {};
 Elm.View.make = function (_elm) {
@@ -7459,12 +7466,11 @@ Elm.View.make = function (_elm) {
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Root = Elm.Root.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
    var bar = F3(function (w,h,cor) {
-      return A2($Graphics$Collage.move,cor,A2($Graphics$Collage.filled,A3($Color.rgb,14,30,95),A2($Graphics$Collage.rect,w,h)));
+      return A2($Graphics$Collage.move,cor,A2($Graphics$Collage.filled,A3($Color.rgb,11,7,43),A2($Graphics$Collage.rect,w,h)));
    });
    var blinders = function (_p0) {
       var _p1 = _p0;
@@ -7491,7 +7497,7 @@ Elm.View.make = function (_elm) {
       _p7,
       _p6,
       _U.list([A2($Graphics$Collage.rotate,$Basics.degrees(0 - s.a),world)
-              ,$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,A2($Basics._op["++"],$Root.root,"scope.png")))
+              ,$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./scope.png"))
               ,blinders({ctor: "_Tuple2",_0: _p7,_1: _p6})
               ,$DrawLander.drawLander(s)]));
    });
@@ -7502,19 +7508,70 @@ Elm.View.make = function (_elm) {
       _p9._1,
       _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 0 - s.x,_1: 0 - s.y},world)])));
    });
-   var stars = $Graphics$Collage.toForm(A3($Graphics$Element.image,500,500,A2($Basics._op["++"],$Root.root,"stars.png")));
+   var planet = $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
+   501,
+   501,
+   _U.list([$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./stars-aseprite-1.png"))
+           ,$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./stars-aseprite-2.png"))])));
+   var stars = $Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./stars-aseprite-1.png"));
    var setUp = function (_p10) {
       var _p11 = _p10;
       return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
       _p11._0,
       _p11._1,
-      _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -250,_1: 250},stars)
+      _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -250,_1: 250},planet)
               ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 250,_1: 250},stars)
               ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 250,_1: -250},stars)
               ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -250,_1: -250},stars)])));
    };
+   var blend = F2(function (_p12,f) {
+      var _p13 = _p12;
+      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
+      _p13._0,
+      _p13._1,
+      _U.list([f,A2($Graphics$Collage.alpha,0.5,setUp({ctor: "_Tuple2",_0: 1000,_1: 1000}))])));
+   });
    var view = F2(function (d,s) {    return A3(reorient,d,s,A3(reposition,{ctor: "_Tuple2",_0: 1000,_1: 1000},s,setUp({ctor: "_Tuple2",_0: 1000,_1: 1000})));});
-   return _elm.View.values = {_op: _op,stars: stars,setUp: setUp,reposition: reposition,reorient: reorient,bar: bar,blinders: blinders,view: view};
+   return _elm.View.values = {_op: _op
+                             ,stars: stars
+                             ,planet: planet
+                             ,setUp: setUp
+                             ,reposition: reposition
+                             ,reorient: reorient
+                             ,bar: bar
+                             ,blinders: blinders
+                             ,blend: blend
+                             ,view: view};
+};
+Elm.Physics = Elm.Physics || {};
+Elm.Physics.make = function (_elm) {
+   "use strict";
+   _elm.Physics = _elm.Physics || {};
+   if (_elm.Physics.values) return _elm.Physics.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Types = Elm.Types.make(_elm);
+   var _op = {};
+   var checkXLeft = function (x) {    checkXLeft: while (true) if (_U.cmp(x,-250) < 0) {    var _v0 = x + 500;x = _v0;continue checkXLeft;} else return x;};
+   var checkXRight = function (x) {    checkXRight: while (true) if (_U.cmp(x,250) > 0) {    var _v1 = x - 500;x = _v1;continue checkXRight;} else return x;};
+   var checkYBottom = function (y) {
+      checkYBottom: while (true) if (_U.cmp(y,-250) < 0) {
+            var _v2 = y + 500;
+            y = _v2;
+            continue checkYBottom;
+         } else return y;
+   };
+   var checkYTop = function (y) {    checkYTop: while (true) if (_U.cmp(y,250) > 0) {    var _v3 = y - 500;y = _v3;continue checkYTop;} else return y;};
+   var physics = F2(function (dt,frege) {
+      return _U.update(frege,
+      {y: checkYBottom(checkYTop(frege.y + dt * frege.vy)),x: checkXLeft(checkXRight(frege.x + dt * frege.vx)),a: frege.a + dt * frege.va});
+   });
+   return _elm.Physics.values = {_op: _op,checkYTop: checkYTop,checkYBottom: checkYBottom,checkXRight: checkXRight,checkXLeft: checkXLeft,physics: physics};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
@@ -7529,6 +7586,7 @@ Elm.Main.make = function (_elm) {
    $Keyboard = Elm.Keyboard.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
+   $Physics = Elm.Physics.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Set = Elm.Set.make(_elm),
    $Signal = Elm.Signal.make(_elm),
@@ -7542,20 +7600,9 @@ Elm.Main.make = function (_elm) {
       var delta = A2($Signal.map,function (t) {    return t / 120;},$Time.fps(30));
       return A2($Signal.sampleOn,delta,A3($Signal.map2,F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),delta,$Keyboard.keysDown));
    }();
-   var physics = F2(function (dt,frege) {
-      var x$ = function () {    var x$$ = frege.x + dt * frege.vx;return _U.cmp(x$$,250) > 0 ? x$$ - 500 : _U.cmp(x$$,-250) < 0 ? x$$ + 500 : x$$;}();
-      var y$ = function () {    var y$$ = frege.y + dt * frege.vy;return _U.cmp(y$$,250) > 0 ? y$$ - 500 : _U.cmp(y$$,-250) < 0 ? y$$ + 500 : y$$;}();
-      return _U.update(frege,{y: y$,x: x$,a: frege.a + dt * frege.va});
-   });
-   var floatModulo = F2(function (n,m) {
-      var n$ = $Basics.round(n);
-      var modulod = A2($Basics._op["%"],n$,m);
-      return A2(F2(function (x,y) {    return x - y;}),$Basics.toFloat(modulod),$Basics.toFloat(n$) - n);
-   });
    var gravity = F2(function (dt,frege) {    return _U.update(frege,{vy: frege.vy - dt / 50,vx: frege.vx - dt / 94});});
    var thrust = function (frege) {
-      return _U.update(frege,
-      {vy: frege.vy + 0.5 * $Thrusters.deltaY(frege),vx: frege.vx + 0.5 * $Thrusters.deltaX(frege),va: frege.va + 0.5 * $Thrusters.deltaAngular(frege)});
+      return _U.update(frege,{vy: frege.vy + $Thrusters.deltaY(frege),vx: frege.vx + $Thrusters.deltaX(frege),va: frege.va + $Thrusters.deltaAngular(frege)});
    };
    var keyPressed = F2(function (key,keys) {    return A2($Set.member,key,keys) ? 1 : 0;});
    var setThrusters = F2(function (keys,s) {
@@ -7566,19 +7613,16 @@ Elm.Main.make = function (_elm) {
                   ,main: A2(keyPressed,$KeyCodes.space,keys)
                   ,rightFront: A2(keyPressed,$KeyCodes.n,keys)
                   ,rightSide: A2(keyPressed,$KeyCodes.k,keys)
-                  ,rightBack: A2(keyPressed,$KeyCodes.u,keys)}});
+                  ,rightBack: A2(keyPressed,$KeyCodes.u,keys)
+                  ,boost: A2($Set.member,$KeyCodes.shift,keys)}});
    });
-   var update = F2(function (_p0,frege) {    var _p1 = _p0;return A2(physics,_p1._0,thrust(A2(setThrusters,_p1._1,frege)));});
-   var frege = {x: 0,y: 0,a: 15,vx: 0,vy: 0,va: -0.1,thrusters: {leftFront: 0,leftSide: 0,leftBack: 0,main: 0,rightFront: 0,rightSide: 0,rightBack: 0}};
-   var main = A3($Signal.map2,$View.view,$Window.dimensions,A3($Signal.foldp,update,frege,input));
+   var update = F2(function (_p0,frege) {    var _p1 = _p0;return A2($Physics.physics,_p1._0,thrust(A2(setThrusters,_p1._1,frege)));});
+   var main = A3($Signal.map2,$View.view,$Window.dimensions,A3($Signal.foldp,update,$Types.frege,input));
    return _elm.Main.values = {_op: _op
-                             ,frege: frege
                              ,keyPressed: keyPressed
                              ,setThrusters: setThrusters
                              ,thrust: thrust
                              ,gravity: gravity
-                             ,floatModulo: floatModulo
-                             ,physics: physics
                              ,update: update
                              ,main: main
                              ,input: input};

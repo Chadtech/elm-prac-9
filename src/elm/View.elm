@@ -12,15 +12,26 @@ import DrawLander       exposing (..)
 stars : Form
 stars = 
   toForm 
-  <|image 500 500 
-  <|root ++ "stars.png"
+  <|image 501 501 
+  <|"./stars-aseprite-1.png"
 
+planet : Form
+planet = 
+  toForm
+  <|collage 501 501
+    [ toForm 
+      <|image 501 501 
+      <|"./stars-aseprite-1.png"
+    , toForm 
+      <|image 501 501 
+      <|"./stars-aseprite-2.png"
+    ]
 
 setUp : (Int, Int) -> Form
 setUp (w,h) =
   toForm
   <|collage w h
-    [ move (-250,  250) stars
+    [ move (-250,  250) planet
     , move ( 250,  250) stars
     , move ( 250, -250) stars
     , move (-250, -250) stars
@@ -40,7 +51,7 @@ reorient (w,h) s world =
   [ rotate (degrees -s.a) world
   , toForm 
     <|image 501 501 
-    <|root ++ "scope.png"
+    <|"./scope.png"
   , blinders (w,h)
   , drawLander s
   ]
@@ -49,7 +60,7 @@ reorient (w,h) s world =
 bar : Float -> Float -> (Float, Float) -> Form
 bar w h cor =
   rect w h
-  |>filled (rgb 14 30 95)
+  |>filled (rgb 11 07 43)
   |>move cor
 
 
@@ -71,10 +82,19 @@ blinders (w,h) =
       ]
 
 
+blend : (Int, Int) -> Form -> Form
+blend (w,h) f =
+  toForm
+  <|collage w h
+    [ f
+    , alpha 0.5 <| setUp (1000, 1000)
+    ]
+
 view : (Int, Int) -> Ship -> Element
 view d s =
   setUp (1000,1000)
   |>reposition (1000,1000) s
+  --|>blend (1000,1000)
   |>reorient d s
 
 
