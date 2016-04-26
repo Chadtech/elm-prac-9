@@ -2,36 +2,48 @@ module Physics where
 
 import Types exposing (Ship, frege)
 
-checkYTop : Float -> Float
-checkYTop y =
-  if y > 250 then checkYTop (y - 500)
+checkYTop : Ship -> Float -> Float
+checkYTop s y =
+  if y > 250 then 
+    checkYTop 
+    { s | tileY = s.tileY + 1 }
+    ( y - 500 )
   else y
 
-checkYBottom : Float -> Float
-checkYBottom y =
-  if y < -250 then checkYBottom (y + 500)
+checkYBottom : Ship -> Float -> Float
+checkYBottom s y =
+  if y < -250 then 
+    checkYBottom 
+    { s | tileY = s.tileY - 1 }
+    ( y + 500 )
   else y
 
-checkXRight : Float -> Float
-checkXRight x =
-  if x > 250 then checkXRight (x - 500)
+checkXRight : Ship -> Float -> Float
+checkXRight s x =
+  if x > 250 then 
+    checkXRight 
+    { s | tileX = s.tileX + 1 } 
+    ( x - 500 )
   else x
 
-checkXLeft : Float -> Float
-checkXLeft x =
-  if x < -250 then checkXLeft (x + 500)
+checkXLeft : Ship -> Float -> Float
+checkXLeft s x =
+  if x < -250 then 
+    checkXLeft 
+    { s | tileX = s.tileX - 1 } 
+    ( x + 500 )
   else x
 
 physics : Float -> Ship -> Ship
-physics dt frege =
-  { frege
+physics dt s =
+  { s
   | y = 
-      checkYBottom
-      <|checkYTop 
-      <|frege.y + dt * frege.vy
+      checkYBottom s
+      <|checkYTop s
+      <|s.y + dt * s.vy
   , x = 
-      checkXLeft
-      <|checkXRight
-      <|frege.x + dt * frege.vx
-  , a = frege.a + dt * frege.va
+      checkXLeft s
+      <|checkXRight s
+      <|s.x + dt * s.vx
+  , a = s.a + dt * s.va
   }

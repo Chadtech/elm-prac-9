@@ -16,9 +16,7 @@ rtc : Float
 rtc = 0.5
 
 boost : Bool -> Float
-boost b =
-  if b then 10 else 1
-
+boost b = if b then 10 else 1
 
 deltaY : Ship -> Float
 deltaY s = 
@@ -61,12 +59,13 @@ deltaX s =
 deltaAngular : Ship -> Float
 deltaAngular s =
   let 
-    t = s.thrusters
+    t  = s.thrusters
+    tf = toFloat
   in
-    ( ( -weakPower * rtc * toFloat t.leftBack)
-    + (  weakPower * rtc * toFloat t.leftFront)
-    + (  weakPower * rtc * toFloat t.rightBack)
-    + ( -weakPower * rtc * toFloat t.rightFront)
+    ( ( -weakPower * rtc * tf t.leftBack)
+    + (  weakPower * rtc * tf t.leftFront)
+    + (  weakPower * rtc * tf t.rightBack)
+    + ( -weakPower * rtc * tf t.rightFront)
     ) * boost t.boost
 
 

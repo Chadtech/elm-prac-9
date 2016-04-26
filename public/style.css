@@ -9,6 +9,10 @@
 ::-webkit-input-placeholder {
   color: #54574d;
 }
+span {
+  color: #f00;
+  font-color: #0ff;
+}
 body {
   background: #030907;
   padding: 0;

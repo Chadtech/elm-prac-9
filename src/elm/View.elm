@@ -8,12 +8,11 @@ import Root             exposing (..)
 import Types            exposing (Ship)
 import DrawLander       exposing (..)
 
-
 stars : Form
 stars = 
   toForm 
   <|image 501 501 
-  <|"./stars-aseprite-1.png"
+  <|"./stars-aseprite-3.png"
 
 planet : Form
 planet = 
@@ -21,7 +20,7 @@ planet =
   <|collage 501 501
     [ toForm 
       <|image 501 501 
-      <|"./stars-aseprite-1.png"
+      <|"./stars-aseprite-3.png"
     , toForm 
       <|image 501 501 
       <|"./stars-aseprite-2.png"
@@ -37,13 +36,11 @@ setUp (w,h) =
     , move (-250, -250) stars
     ]
 
-
 reposition : (Int, Int) -> Ship -> Form -> Form
 reposition (w,h) s world = 
   toForm
   <|collage w h
     [ move (-s.x,-s.y) world ]
-
 
 reorient : (Int, Int) -> Ship -> Form -> Element
 reorient (w,h) s world =
@@ -56,13 +53,11 @@ reorient (w,h) s world =
   , drawLander s
   ]
 
-
 bar : Float -> Float -> (Float, Float) -> Form
 bar w h cor =
   rect w h
   |>filled (rgb 11 07 43)
   |>move cor
-
 
 blinders : (Int, Int) -> Form
 blinders (w,h) =
@@ -80,7 +75,6 @@ blinders (w,h) =
       , bar hBarWidth hBarHeight (-(w' - 500)/2 - 15, 0)
       , bar hBarWidth hBarHeight ((w'- 500)/2 + 15, 0)
       ]
-
 
 blend : (Int, Int) -> Form -> Form
 blend (w,h) f =

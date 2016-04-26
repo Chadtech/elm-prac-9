@@ -25,7 +25,7 @@ drawLander s =
 
     lander = 
       [ imager 47 48 
-        <|"./darkened-lander.png" 
+        <|"./lander.png" 
       ]
 
     mainThruster = 

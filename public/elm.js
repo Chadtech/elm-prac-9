@@ -7350,7 +7350,7 @@ Elm.DrawLander.make = function (_elm) {
    var _op = {};
    var imager = F3(function (w,h,str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,w,h,str));});
    var drawLander = function (s) {
-      var lander = _U.list([A3(imager,47,48,"./darkened-lander.png")]);
+      var lander = _U.list([A3(imager,47,48,"./lander.png")]);
       var strafer = function (i) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,i));};
       var sides = function (i) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,i));};
       var t = s.thrusters;
@@ -7439,8 +7439,9 @@ Elm.Thrusters.make = function (_elm) {
       return ((0 - mainPower) * s$ * tf(t.main) + (0 - weakPower) * s$ * tf(t.leftBack) + weakPower * s$ * tf(t.leftFront) + (0 - weakPower) * s$ * tf(t.rightBack) + weakPower * s$ * tf(t.rightFront) + (0 - weakPower) * c$ * tf(t.leftSide) + weakPower * c$ * tf(t.rightSide)) * boost(t.boost);
    };
    var deltaAngular = function (s) {
+      var tf = $Basics.toFloat;
       var t = s.thrusters;
-      return ((0 - weakPower) * rtc * $Basics.toFloat(t.leftBack) + weakPower * rtc * $Basics.toFloat(t.leftFront) + weakPower * rtc * $Basics.toFloat(t.rightBack) + (0 - weakPower) * rtc * $Basics.toFloat(t.rightFront)) * boost(t.boost);
+      return ((0 - weakPower) * rtc * tf(t.leftBack) + weakPower * rtc * tf(t.leftFront) + weakPower * rtc * tf(t.rightBack) + (0 - weakPower) * rtc * tf(t.rightFront)) * boost(t.boost);
    };
    return _elm.Thrusters.values = {_op: _op
                                   ,weakPower: weakPower
@@ -7511,9 +7512,9 @@ Elm.View.make = function (_elm) {
    var planet = $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
    501,
    501,
-   _U.list([$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./stars-aseprite-1.png"))
+   _U.list([$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./stars-aseprite-3.png"))
            ,$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./stars-aseprite-2.png"))])));
-   var stars = $Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./stars-aseprite-1.png"));
+   var stars = $Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./stars-aseprite-3.png"));
    var setUp = function (_p10) {
       var _p11 = _p10;
       return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
@@ -7557,19 +7558,40 @@ Elm.Physics.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
-   var checkXLeft = function (x) {    checkXLeft: while (true) if (_U.cmp(x,-250) < 0) {    var _v0 = x + 500;x = _v0;continue checkXLeft;} else return x;};
-   var checkXRight = function (x) {    checkXRight: while (true) if (_U.cmp(x,250) > 0) {    var _v1 = x - 500;x = _v1;continue checkXRight;} else return x;};
-   var checkYBottom = function (y) {
+   var checkXLeft = F2(function (s,x) {
+      checkXLeft: while (true) if (_U.cmp(x,-250) < 0) {
+            var _v0 = _U.update(s,{tileX: s.tileX - 1}),_v1 = x + 500;
+            s = _v0;
+            x = _v1;
+            continue checkXLeft;
+         } else return x;
+   });
+   var checkXRight = F2(function (s,x) {
+      checkXRight: while (true) if (_U.cmp(x,250) > 0) {
+            var _v2 = _U.update(s,{tileX: s.tileX + 1}),_v3 = x - 500;
+            s = _v2;
+            x = _v3;
+            continue checkXRight;
+         } else return x;
+   });
+   var checkYBottom = F2(function (s,y) {
       checkYBottom: while (true) if (_U.cmp(y,-250) < 0) {
-            var _v2 = y + 500;
-            y = _v2;
+            var _v4 = _U.update(s,{tileY: s.tileY - 1}),_v5 = y + 500;
+            s = _v4;
+            y = _v5;
             continue checkYBottom;
          } else return y;
-   };
-   var checkYTop = function (y) {    checkYTop: while (true) if (_U.cmp(y,250) > 0) {    var _v3 = y - 500;y = _v3;continue checkYTop;} else return y;};
-   var physics = F2(function (dt,frege) {
-      return _U.update(frege,
-      {y: checkYBottom(checkYTop(frege.y + dt * frege.vy)),x: checkXLeft(checkXRight(frege.x + dt * frege.vx)),a: frege.a + dt * frege.va});
+   });
+   var checkYTop = F2(function (s,y) {
+      checkYTop: while (true) if (_U.cmp(y,250) > 0) {
+            var _v6 = _U.update(s,{tileY: s.tileY + 1}),_v7 = y - 500;
+            s = _v6;
+            y = _v7;
+            continue checkYTop;
+         } else return y;
+   });
+   var physics = F2(function (dt,s) {
+      return _U.update(s,{y: A2(checkYBottom,s,A2(checkYTop,s,s.y + dt * s.vy)),x: A2(checkXLeft,s,A2(checkXRight,s,s.x + dt * s.vx)),a: s.a + dt * s.va});
    });
    return _elm.Physics.values = {_op: _op,checkYTop: checkYTop,checkYBottom: checkYBottom,checkXRight: checkXRight,checkXLeft: checkXLeft,physics: physics};
 };
