@@ -6,10 +6,10 @@ tf : Int -> Float
 tf = toFloat
 
 weakPower : Float
-weakPower = 0.1
+weakPower = 0.128
 
 mainPower : Float
-mainPower = weakPower * 5
+mainPower = weakPower * 7
 
 -- How much should the craft
 -- rotate relative to 
@@ -19,7 +19,7 @@ rtc : Float
 rtc = 0.5
 
 boost : Bool -> Float
-boost b = if b then 10 else 1
+boost b = if b then 5 else 1
 
 deltaY : Ship -> Float
 deltaY s = 

@@ -7303,7 +7303,7 @@ Elm.Root.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var root = "https://raw.githubusercontent.com/Chadtech/elm-prac-7/master/public/";
+   var root = "./";
    return _elm.Root.values = {_op: _op,root: root};
 };
 Elm.Types = Elm.Types || {};
@@ -7348,40 +7348,78 @@ Elm.DrawLander.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
+   var drawStrafer = function (str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,str));};
+   var drawRotator = function (str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,str));};
    var imager = F3(function (w,h,str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,w,h,str));});
-   var drawLander = function (s) {
-      var lander = _U.list([A3(imager,47,48,"./lander.png")]);
-      var strafer = function (i) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,i));};
-      var sides = function (i) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,i));};
-      var t = s.thrusters;
-      var mainThruster = _U.cmp(t.main,1) > -1 ? _U.list([A2($Graphics$Collage.move,
+   var src = function (str) {    return A2($Basics._op["++"],$Root.root,A2($Basics._op["++"],str,".png"));};
+   var mainThruster = F2(function (firing,boost) {
+      var blast = boost ? src("blast_main-1") : src("blast_main-weak");
+      return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 0,_1: -30},
-      A3(imager,11,30,"./blast_main-weak.png"))]) : _U.list([]);
-      var leftFront = _U.cmp(t.leftFront,1) > -1 ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: -19,_1: 9},
-      sides("./blast_yaw-weak.png"))]) : _U.list([]);
-      var leftBack = _U.cmp(t.leftBack,1) > -1 ? _U.list([A2($Graphics$Collage.move,
+      $Graphics$Collage.toForm(A3($Graphics$Element.image,11,30,blast)))]) : _U.list([]);
+   });
+   var leftFront = F2(function (firing,boost) {
+      var blast = boost ? src("blast_yaw") : src("blast_yaw-weak");
+      return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -19,_1: 9},drawRotator(blast))]) : _U.list([]);
+   });
+   var leftBack = F2(function (firing,boost) {
+      var blast = boost ? src("blast_yaw_f") : src("blast_yaw_f-weak");
+      return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: -19,_1: -9},
-      A2($Graphics$Collage.scale,-1,sides("./blast_yaw_f-weak.png")))]) : _U.list([]);
-      var leftSide = _U.cmp(t.leftSide,1) > -1 ? _U.list([A2($Graphics$Collage.move,
+      A2($Graphics$Collage.scale,-1,drawRotator(blast)))]) : _U.list([]);
+   });
+   var leftSide = F2(function (firing,boost) {
+      var blast = boost ? src("blast_strafe") : src("blast_strafe-weak");
+      return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 25,_1: -1},
-      A2($Graphics$Collage.rotate,$Basics.degrees(180),strafer("./blast_strafe-weak.png")))]) : _U.list([]);
-      var rightSide = _U.cmp(t.rightSide,1) > -1 ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: -25,_1: -1},
-      strafer("./blast_strafe-weak.png"))]) : _U.list([]);
-      var rightFront = _U.cmp(t.rightFront,1) > -1 ? _U.list([A2($Graphics$Collage.move,
+      A2($Graphics$Collage.rotate,$Basics.degrees(180),drawStrafer(blast)))]) : _U.list([]);
+   });
+   var rightSide = F2(function (firing,boost) {
+      var blast = boost ? src("blast_strafe") : src("blast_strafe-weak");
+      return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -23,_1: -1},drawStrafer(blast))]) : _U.list([]);
+   });
+   var rightFront = F2(function (firing,boost) {
+      var blast = boost ? src("blast_yaw_f") : src("blast_yaw_f-weak");
+      return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 19,_1: 9},
-      A2($Graphics$Collage.rotate,$Basics.degrees(180),A2($Graphics$Collage.scale,-1,sides("./blast_yaw_f-weak.png"))))]) : _U.list([]);
-      var rightBack = _U.cmp(t.rightBack,1) > -1 ? _U.list([A2($Graphics$Collage.move,
+      A2($Graphics$Collage.rotate,$Basics.degrees(180),A2($Graphics$Collage.scale,-1,drawRotator(blast))))]) : _U.list([]);
+   });
+   var rightBack = F2(function (firing,boost) {
+      var blast = boost ? src("blast_yaw") : src("blast_yaw_f-weak");
+      return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 19,_1: -9},
-      A2($Graphics$Collage.rotate,$Basics.degrees(180),sides("./blast_yaw-weak.png")))]) : _U.list([]);
+      A2($Graphics$Collage.rotate,$Basics.degrees(180),drawRotator(blast)))]) : _U.list([]);
+   });
+   var drawLander = function (s) {
+      var t = s.thrusters;
       return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
       138,
       138,
-      A3($List.foldr,$List.append,_U.list([]),_U.list([rightSide,leftSide,rightBack,leftBack,rightFront,leftFront,mainThruster,lander]))));
+      A3($List.foldr,
+      $List.append,
+      _U.list([]),
+      _U.list([A2(rightSide,t.rightSide,t.boost)
+              ,A2(leftSide,t.leftSide,t.boost)
+              ,A2(rightBack,t.rightBack,t.boost)
+              ,A2(leftBack,t.leftBack,t.boost)
+              ,A2(rightFront,t.rightFront,t.boost)
+              ,A2(leftFront,t.leftFront,t.boost)
+              ,A2(mainThruster,t.main,t.boost)
+              ,_U.list([A3(imager,47,48,"./lander.png")])]))));
    };
-   var src = function (str) {    return A2($Basics._op["++"],$Root.root,A2($Basics._op["++"],str,".png"));};
-   return _elm.DrawLander.values = {_op: _op,src: src,imager: imager,drawLander: drawLander};
+   return _elm.DrawLander.values = {_op: _op
+                                   ,src: src
+                                   ,imager: imager
+                                   ,drawRotator: drawRotator
+                                   ,drawStrafer: drawStrafer
+                                   ,mainThruster: mainThruster
+                                   ,leftFront: leftFront
+                                   ,leftBack: leftBack
+                                   ,leftSide: leftSide
+                                   ,rightSide: rightSide
+                                   ,rightFront: rightFront
+                                   ,rightBack: rightBack
+                                   ,drawLander: drawLander};
 };
 Elm.KeyCodes = Elm.KeyCodes || {};
 Elm.KeyCodes.make = function (_elm) {
@@ -7420,10 +7458,10 @@ Elm.Thrusters.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
-   var boost = function (b) {    return b ? 10 : 1;};
+   var boost = function (b) {    return b ? 5 : 1;};
    var rtc = 0.5;
-   var weakPower = 0.1;
-   var mainPower = weakPower * 5;
+   var weakPower = 0.128;
+   var mainPower = weakPower * 7;
    var tf = $Basics.toFloat;
    var deltaY = function (s) {
       var s$ = $Basics.sin($Basics.degrees(s.a));
@@ -7557,10 +7595,10 @@ Elm.Physics.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
-   var rollXLeft = function (x) {    return _U.cmp(x,-250) < 0 ? rollXLeft(x) + 500 : x;};
-   var rollXRight = function (x) {    return _U.cmp(x,250) > 0 ? rollXRight(x) - 500 : x;};
-   var rollYBottom = function (y) {    return _U.cmp(y,-250) < 0 ? rollYBottom(y) + 500 : y;};
-   var rollYTop = function (y) {    return _U.cmp(y,250) > 0 ? rollYTop(y) - 500 : y;};
+   var rollXLeft = function (x) {    rollXLeft: while (true) if (_U.cmp(x,-250) < 0) {    var _v0 = x + 500;x = _v0;continue rollXLeft;} else return x;};
+   var rollXRight = function (x) {    rollXRight: while (true) if (_U.cmp(x,250) > 0) {    var _v1 = x - 500;x = _v1;continue rollXRight;} else return x;};
+   var rollYBottom = function (y) {    rollYBottom: while (true) if (_U.cmp(y,-250) < 0) {    var _v2 = y + 500;y = _v2;continue rollYBottom;} else return y;};
+   var rollYTop = function (y) {    rollYTop: while (true) if (_U.cmp(y,250) > 0) {    var _v3 = y - 500;y = _v3;continue rollYTop;} else return y;};
    var physics = F2(function (dt,s) {
       var x$ = s.x + dt * s.vx;
       var xm = rollXLeft(rollXRight(x$));
