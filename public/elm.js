@@ -7424,26 +7424,25 @@ Elm.Thrusters.make = function (_elm) {
    var rtc = 0.5;
    var weakPower = 0.1;
    var mainPower = weakPower * 5;
+   var tf = $Basics.toFloat;
    var deltaY = function (s) {
-      var tf = $Basics.toFloat;
       var s$ = $Basics.sin($Basics.degrees(s.a));
       var c$ = $Basics.cos($Basics.degrees(s.a));
       var t = s.thrusters;
       return (mainPower * c$ * tf(t.main) + weakPower * c$ * tf(t.leftBack) + (0 - weakPower) * c$ * tf(t.leftFront) + weakPower * c$ * tf(t.rightBack) + (0 - weakPower) * c$ * tf(t.rightFront) + (0 - weakPower) * s$ * tf(t.leftSide) + weakPower * s$ * tf(t.rightSide)) * boost(t.boost);
    };
    var deltaX = function (s) {
-      var tf = $Basics.toFloat;
       var s$ = $Basics.sin($Basics.degrees(s.a));
       var c$ = $Basics.cos($Basics.degrees(s.a));
       var t = s.thrusters;
       return ((0 - mainPower) * s$ * tf(t.main) + (0 - weakPower) * s$ * tf(t.leftBack) + weakPower * s$ * tf(t.leftFront) + (0 - weakPower) * s$ * tf(t.rightBack) + weakPower * s$ * tf(t.rightFront) + (0 - weakPower) * c$ * tf(t.leftSide) + weakPower * c$ * tf(t.rightSide)) * boost(t.boost);
    };
    var deltaAngular = function (s) {
-      var tf = $Basics.toFloat;
       var t = s.thrusters;
       return ((0 - weakPower) * rtc * tf(t.leftBack) + weakPower * rtc * tf(t.leftFront) + weakPower * rtc * tf(t.rightBack) + (0 - weakPower) * rtc * tf(t.rightFront)) * boost(t.boost);
    };
    return _elm.Thrusters.values = {_op: _op
+                                  ,tf: tf
                                   ,weakPower: weakPower
                                   ,mainPower: mainPower
                                   ,rtc: rtc
@@ -7558,42 +7557,20 @@ Elm.Physics.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
-   var checkXLeft = F2(function (s,x) {
-      checkXLeft: while (true) if (_U.cmp(x,-250) < 0) {
-            var _v0 = _U.update(s,{tileX: s.tileX - 1}),_v1 = x + 500;
-            s = _v0;
-            x = _v1;
-            continue checkXLeft;
-         } else return x;
-   });
-   var checkXRight = F2(function (s,x) {
-      checkXRight: while (true) if (_U.cmp(x,250) > 0) {
-            var _v2 = _U.update(s,{tileX: s.tileX + 1}),_v3 = x - 500;
-            s = _v2;
-            x = _v3;
-            continue checkXRight;
-         } else return x;
-   });
-   var checkYBottom = F2(function (s,y) {
-      checkYBottom: while (true) if (_U.cmp(y,-250) < 0) {
-            var _v4 = _U.update(s,{tileY: s.tileY - 1}),_v5 = y + 500;
-            s = _v4;
-            y = _v5;
-            continue checkYBottom;
-         } else return y;
-   });
-   var checkYTop = F2(function (s,y) {
-      checkYTop: while (true) if (_U.cmp(y,250) > 0) {
-            var _v6 = _U.update(s,{tileY: s.tileY + 1}),_v7 = y - 500;
-            s = _v6;
-            y = _v7;
-            continue checkYTop;
-         } else return y;
-   });
+   var rollXLeft = function (x) {    rollXLeft: while (true) if (_U.cmp(x,-250) < 0) {    var _v0 = x + 500;x = _v0;continue rollXLeft;} else return x;};
+   var rollXRight = function (x) {    rollXRight: while (true) if (_U.cmp(x,250) > 0) {    var _v1 = x - 500;x = _v1;continue rollXRight;} else return x;};
+   var rollYBottom = function (y) {    rollYBottom: while (true) if (_U.cmp(y,-250) < 0) {    var _v2 = y + 500;y = _v2;continue rollYBottom;} else return y;};
+   var rollYTop = function (y) {    rollYTop: while (true) if (_U.cmp(y,250) > 0) {    var _v3 = y - 500;y = _v3;continue rollYTop;} else return y;};
    var physics = F2(function (dt,s) {
-      return _U.update(s,{y: A2(checkYBottom,s,A2(checkYTop,s,s.y + dt * s.vy)),x: A2(checkXLeft,s,A2(checkXRight,s,s.x + dt * s.vx)),a: s.a + dt * s.va});
+      var x$ = s.x + dt * s.vx;
+      var xm = rollXLeft(rollXRight(x$));
+      var dxt = $Basics.round(xm - x$) / 500 | 0;
+      var y$ = s.y + dt * s.vy;
+      var ym = rollYBottom(rollYTop(y$));
+      var dyt = $Basics.round(ym - y$) / 500 | 0;
+      return _U.update(s,{y: ym,x: xm,tileY: s.tileY + dyt,tileX: s.tileX + dxt,a: s.a + dt * s.va});
    });
-   return _elm.Physics.values = {_op: _op,checkYTop: checkYTop,checkYBottom: checkYBottom,checkXRight: checkXRight,checkXLeft: checkXLeft,physics: physics};
+   return _elm.Physics.values = {_op: _op,rollYTop: rollYTop,rollYBottom: rollYBottom,rollXRight: rollXRight,rollXLeft: rollXLeft,physics: physics};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
@@ -7622,10 +7599,8 @@ Elm.Main.make = function (_elm) {
       var delta = A2($Signal.map,function (t) {    return t / 120;},$Time.fps(30));
       return A2($Signal.sampleOn,delta,A3($Signal.map2,F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),delta,$Keyboard.keysDown));
    }();
-   var gravity = F2(function (dt,frege) {    return _U.update(frege,{vy: frege.vy - dt / 50,vx: frege.vx - dt / 94});});
-   var thrust = function (frege) {
-      return _U.update(frege,{vy: frege.vy + $Thrusters.deltaY(frege),vx: frege.vx + $Thrusters.deltaX(frege),va: frege.va + $Thrusters.deltaAngular(frege)});
-   };
+   var gravity = F2(function (dt,s) {    return _U.update(s,{vy: s.vy - dt / 50,vx: s.vx - dt / 94});});
+   var thrust = function (s) {    return _U.update(s,{vy: s.vy + $Thrusters.deltaY(s),vx: s.vx + $Thrusters.deltaX(s),va: s.va + $Thrusters.deltaAngular(s)});};
    var keyPressed = F2(function (key,keys) {    return A2($Set.member,key,keys) ? 1 : 0;});
    var setThrusters = F2(function (keys,s) {
       return _U.update(s,
@@ -7638,7 +7613,7 @@ Elm.Main.make = function (_elm) {
                   ,rightBack: A2(keyPressed,$KeyCodes.u,keys)
                   ,boost: A2($Set.member,$KeyCodes.shift,keys)}});
    });
-   var update = F2(function (_p0,frege) {    var _p1 = _p0;return A2($Physics.physics,_p1._0,thrust(A2(setThrusters,_p1._1,frege)));});
+   var update = F2(function (_p0,s) {    var _p1 = _p0;return A2($Physics.physics,_p1._0,thrust(A2(setThrusters,_p1._1,s)));});
    var main = A3($Signal.map2,$View.view,$Window.dimensions,A3($Signal.foldp,update,$Types.frege,input));
    return _elm.Main.values = {_op: _op
                              ,keyPressed: keyPressed

@@ -24,9 +24,7 @@ drawLander s =
     strafer = \i -> toForm <|image 8 3 i
 
     lander = 
-      [ imager 47 48 
-        <|"./lander.png" 
-      ]
+      [ imager 47 48 "./lander.png" ]
 
     mainThruster = 
       if t.main >= 1 then

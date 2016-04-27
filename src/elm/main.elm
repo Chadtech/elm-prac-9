@@ -38,27 +38,27 @@ setThrusters keys s =
   }
 
 thrust : Ship -> Ship
-thrust frege =
-  { frege
-  | vy = frege.vy + (deltaY       frege)
-  , vx = frege.vx + (deltaX       frege)
-  , va = frege.va + (deltaAngular frege)
+thrust s =
+  { s
+  | vy = s.vy + (deltaY       s)
+  , vx = s.vx + (deltaX       s)
+  , va = s.va + (deltaAngular s)
   }
 
 gravity : Float -> Ship -> Ship
-gravity dt frege =
-  { frege
-  | vy = frege.vy - dt/50
-  , vx = frege.vx - dt/94
+gravity dt s =
+  { s
+  | vy = s.vy - dt/50
+  , vx = s.vx - dt/94
   }
 
 update : (Float, Set Int) -> Ship -> Ship
-update (dt, keys) frege =
-  frege
-    |>setThrusters keys
-    --|> gravity dt
-    |>thrust
-    |>physics dt
+update (dt, keys) s =
+  s
+  |>setThrusters keys
+  --|> gravity dt
+  |>thrust
+  |>physics dt
 
 main : Signal Element
 main =

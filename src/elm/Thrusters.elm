@@ -2,6 +2,9 @@ module Thrusters where
 
 import Types exposing (Ship)
 
+tf : Int -> Float
+tf = toFloat
+
 weakPower : Float
 weakPower = 0.1
 
@@ -24,7 +27,6 @@ deltaY s =
     t  = s.thrusters
     c' = cos (degrees s.a)
     s' = sin (degrees s.a)
-    tf = toFloat
   in
     ( (  mainPower * c' * tf t.main)       -- Main
     + (  weakPower * c' * tf t.leftBack)   -- left back
@@ -35,15 +37,12 @@ deltaY s =
     + (  weakPower * s' * tf t.rightSide)  -- right side
     ) * boost t.boost
 
-
-
 deltaX : Ship -> Float
 deltaX s = 
   let
     t  = s.thrusters
     c' = cos (degrees s.a)
     s' = sin (degrees s.a)
-    tf = toFloat
   in
     ( ( -mainPower * s' * tf t.main)       -- Main
     + ( -weakPower * s' * tf t.leftBack)   -- left back
@@ -54,13 +53,10 @@ deltaX s =
     + (  weakPower * c' * tf t.rightSide)  -- right side
     ) * boost t.boost
 
-
-
 deltaAngular : Ship -> Float
 deltaAngular s =
   let 
     t  = s.thrusters
-    tf = toFloat
   in
     ( ( -weakPower * rtc * tf t.leftBack)
     + (  weakPower * rtc * tf t.leftFront)

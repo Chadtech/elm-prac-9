@@ -1,49 +1,54 @@
 module Physics where
 
 import Types exposing (Ship, frege)
+import Debug exposing (log)
 
-checkYTop : Ship -> Float -> Float
-checkYTop s y =
+rollYTop : Float -> Float
+rollYTop y =
   if y > 250 then 
-    checkYTop 
-    { s | tileY = s.tileY + 1 }
-    ( y - 500 )
+    rollYTop (y - 500)
   else y
 
-checkYBottom : Ship -> Float -> Float
-checkYBottom s y =
+rollYBottom : Float -> Float
+rollYBottom y =
   if y < -250 then 
-    checkYBottom 
-    { s | tileY = s.tileY - 1 }
-    ( y + 500 )
+    rollYBottom (y + 500)
   else y
 
-checkXRight : Ship -> Float -> Float
-checkXRight s x =
+rollXRight : Float -> Float
+rollXRight x =
   if x > 250 then 
-    checkXRight 
-    { s | tileX = s.tileX + 1 } 
-    ( x - 500 )
+    rollXRight (x - 500)
   else x
 
-checkXLeft : Ship -> Float -> Float
-checkXLeft s x =
+rollXLeft : Float -> Float
+rollXLeft x =
   if x < -250 then 
-    checkXLeft 
-    { s | tileX = s.tileX - 1 } 
-    ( x + 500 )
+    rollXLeft (x + 500)
   else x
 
 physics : Float -> Ship -> Ship
 physics dt s =
-  { s
-  | y = 
-      checkYBottom s
-      <|checkYTop s
-      <|s.y + dt * s.vy
-  , x = 
-      checkXLeft s
-      <|checkXRight s
-      <|s.x + dt * s.vx
-  , a = s.a + dt * s.va
-  }
+  let 
+    y' = s.y + dt * s.vy
+    x' = s.x + dt * s.vx
+
+    ym =
+      rollYTop y'
+      |>rollYBottom
+
+    xm =
+      rollXRight x'
+      |>rollXLeft
+
+    dyt = (round (ym - y')) // 500 
+    dxt = (round (xm - x')) // 500
+  
+  in
+    { s
+    | y     = ym
+    , x     = xm
+    , tileY = s.tileY + dyt
+    , tileX = s.tileX + dxt
+    , a     = s.a + dt * s.va
+    }
