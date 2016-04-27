@@ -7321,7 +7321,7 @@ Elm.Types.make = function (_elm) {
    var _op = {};
    var frege = {x: 0
                ,y: 0
-               ,a: 15
+               ,a: 0
                ,vx: 0
                ,vy: 0
                ,va: -0.1
@@ -7558,8 +7558,14 @@ Elm.Physics.make = function (_elm) {
    $Types = Elm.Types.make(_elm);
    var _op = {};
    var rollXLeft = function (x) {    return _U.cmp(x,-250) < 0 ? rollXLeft(x) + 500 : x;};
-   var rollXRight = function (x) {    return _U.cmp(x,250) > 0 ? rollXRight(x) - 500 : x;};
-   var rollYBottom = function (y) {    return _U.cmp(y,-250) < 0 ? rollYBottom(y) + 500 : y;};
+   var rollXRight = function (x) {    return _U.cmp(x,250) > 0 ? A2($Debug.log,"x",rollXRight(x) - 500) : x;};
+   var rollYBottom = function (y) {
+      rollYBottom: while (true) if (_U.cmp(y,-250) < 0) {
+            var _v0 = A2($Debug.log,"y",y + 500);
+            y = _v0;
+            continue rollYBottom;
+         } else return y;
+   };
    var rollYTop = function (y) {    return _U.cmp(y,250) > 0 ? rollYTop(y) - 500 : y;};
    var physics = F2(function (dt,s) {
       var x$ = s.x + dt * s.vx;

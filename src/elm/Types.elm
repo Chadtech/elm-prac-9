@@ -29,7 +29,7 @@ frege : Ship
 frege = 
   { x            = 0
   , y            = 0
-  , a            = 15
+  , a            = 0
 
   , vx           = 0
   , vy           = 0
