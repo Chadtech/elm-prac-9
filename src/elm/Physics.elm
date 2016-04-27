@@ -6,25 +6,25 @@ import Debug exposing (log)
 rollYTop : Float -> Float
 rollYTop y =
   if y > 250 then 
-    rollYTop (y - 500)
+    rollYTop y - 500
   else y
 
 rollYBottom : Float -> Float
 rollYBottom y =
   if y < -250 then 
-    rollYBottom (y + 500)
+    rollYBottom y + 500
   else y
 
 rollXRight : Float -> Float
 rollXRight x =
   if x > 250 then 
-    rollXRight (x - 500)
+    rollXRight x - 500
   else x
 
 rollXLeft : Float -> Float
 rollXLeft x =
   if x < -250 then 
-    rollXLeft (x + 500)
+    rollXLeft x + 500
   else x
 
 physics : Float -> Ship -> Ship
