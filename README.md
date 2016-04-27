@@ -1,0 +1,1 @@
+Clone this repo, then run 'npm install', then run 'gulp'. The game will be available at localhost:2998
