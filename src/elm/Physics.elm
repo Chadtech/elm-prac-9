@@ -27,6 +27,18 @@ rollXLeft x =
     rollXLeft (x + 500)
   else x
 
+rollAngleC : Float -> Float
+rollAngleC a =
+  if a > 180 then
+    rollAngleC (a - 3600)
+  else a
+
+rollAngleCC : Float -> Float
+rollAngleCC a =
+  if a < -180 then
+    rollAngleCC (a + 360)
+  else a
+
 physics : Float -> Ship -> Ship
 physics dt s =
   let 
@@ -50,5 +62,15 @@ physics dt s =
     , x     = xm
     , tileY = s.tileY + dyt
     , tileX = s.tileX + dxt
-    , a     = s.a + dt * s.va
+    , a     = 
+        s.a + dt * s.va
+        |>rollAngleC
+        |>rollAngleCC
+
     }
+
+
+
+
+
+
