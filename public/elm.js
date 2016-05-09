@@ -10765,7 +10765,7 @@ Elm.Source.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var root = "./";
+   var root = "https://raw.githubusercontent.com/Chadtech/elm-prac-9/master/public/";
    var src = function (str) {    return A2($Basics._op["++"],root,A2($Basics._op["++"],str,".png"));};
    return _elm.Source.values = {_op: _op,root: root,src: src};
 };
@@ -11015,10 +11015,11 @@ Elm.Minimap.make = function (_elm) {
    $Source = Elm.Source.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
+   var tf = $Basics.toFloat;
    _op["."] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
    var minimap = function (s) {
-      var y = ($Basics.toFloat(s.tileY) * 500 + 250 + s.y) / 110;
-      var x = ($Basics.toFloat(s.tileX) * 500 + 250 + s.x) / 110;
+      var y = (tf(s.tileY) * 500 + 250 + s.y) / 110;
+      var x = (tf(s.tileX) * 500 + 250 + s.x) / 110;
       return A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 260,_1: 298},
       $Graphics$Collage.toForm(A3($Html.toElement,
@@ -11047,7 +11048,7 @@ Elm.Minimap.make = function (_elm) {
               {ctor: "_Tuple2",_0: -79.6,_1: 82},
               $Graphics$Collage.toForm(A3($Graphics$Element.image,10,10,$Source.src("stars-aseprite-2"))))])))])))));
    };
-   return _elm.Minimap.values = {_op: _op,minimap: minimap};
+   return _elm.Minimap.values = {_op: _op,tf: tf,minimap: minimap};
 };
 Elm.Frame = Elm.Frame || {};
 Elm.Frame.make = function (_elm) {
