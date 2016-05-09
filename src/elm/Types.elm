@@ -12,6 +12,10 @@ type alias Ship =
   , tileX:        Int
   , tileY:        Int
 
+  , fuel:         Float
+  , oxygen:       Float
+  , weight:       Float
+
   , thrusters: 
     { leftFront:  Int
     , leftSide:   Int
@@ -28,14 +32,18 @@ frege : Ship
 frege = 
   { x            = -150
   , y            = -150
-  , a            = 0
+  , a            = 20
 
-  , vx           = 0
-  , vy           = 0
-  , va           = -0.1
+  , vx           = -2.4275
+  , vy           = 4.472
+  , va           = -2
 
-  , tileX        = 0
-  , tileY        = 0
+  , tileX        = 45
+  , tileY        = 4
+
+  , fuel         = 1410.1
+  , oxygen       = 166
+  , weight       = 852
 
   , thrusters    =
     { leftFront  = 0

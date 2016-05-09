@@ -1,7 +1,6 @@
 module Physics where
 
 import Types exposing (Ship, frege)
-import Debug exposing (log)
 
 rollYTop : Float -> Float
 rollYTop y =
@@ -53,8 +52,10 @@ physics dt s =
       rollXRight x'
       |>rollXLeft
 
-    dyt = (round (ym - y')) // 500 
-    dxt = (round (xm - x')) // 500
+    dyt = 
+      (round (y' - ym)) // 500 
+    dxt = 
+      (round (x' - xm)) // 500
   
   in
     { s

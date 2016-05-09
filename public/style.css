@@ -32,9 +32,6 @@ body {
   color: #b0a69a;
   font-size: 2em;
   margin: 0;
-  font-smooth: never;
-  webkit-font-smoothing: none;
-  -webkit-font-smoothing: none;
 }
 .point.logic {
   font-family: HFLLG;

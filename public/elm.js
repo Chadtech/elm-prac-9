@@ -8513,233 +8513,6 @@ Elm.Native.Window.make = function make(localRuntime) {
 	};
 };
 
-Elm.Random = Elm.Random || {};
-Elm.Random.make = function (_elm) {
-   "use strict";
-   _elm.Random = _elm.Random || {};
-   if (_elm.Random.values) return _elm.Random.values;
-   var _U = Elm.Native.Utils.make(_elm),$Basics = Elm.Basics.make(_elm),$List = Elm.List.make(_elm);
-   var _op = {};
-   var magicNum8 = 2147483562;
-   var range = function (_p0) {    return {ctor: "_Tuple2",_0: 0,_1: magicNum8};};
-   var magicNum7 = 2137383399;
-   var magicNum6 = 2147483563;
-   var magicNum5 = 3791;
-   var magicNum4 = 40692;
-   var magicNum3 = 52774;
-   var magicNum2 = 12211;
-   var magicNum1 = 53668;
-   var magicNum0 = 40014;
-   var generate = F2(function (_p1,seed) {    var _p2 = _p1;return _p2._0(seed);});
-   var Seed = function (a) {    return {ctor: "Seed",_0: a};};
-   var State = F2(function (a,b) {    return {ctor: "State",_0: a,_1: b};});
-   var initState = function (s$) {
-      var s = A2($Basics.max,s$,0 - s$);
-      var q = s / (magicNum6 - 1) | 0;
-      var s2 = A2($Basics._op["%"],q,magicNum7 - 1);
-      var s1 = A2($Basics._op["%"],s,magicNum6 - 1);
-      return A2(State,s1 + 1,s2 + 1);
-   };
-   var next = function (_p3) {
-      var _p4 = _p3;
-      var _p6 = _p4._1;
-      var _p5 = _p4._0;
-      var k$ = _p6 / magicNum3 | 0;
-      var s2$ = magicNum4 * (_p6 - k$ * magicNum3) - k$ * magicNum5;
-      var s2$$ = _U.cmp(s2$,0) < 0 ? s2$ + magicNum7 : s2$;
-      var k = _p5 / magicNum1 | 0;
-      var s1$ = magicNum0 * (_p5 - k * magicNum1) - k * magicNum2;
-      var s1$$ = _U.cmp(s1$,0) < 0 ? s1$ + magicNum6 : s1$;
-      var z = s1$$ - s2$$;
-      var z$ = _U.cmp(z,1) < 0 ? z + magicNum8 : z;
-      return {ctor: "_Tuple2",_0: z$,_1: A2(State,s1$$,s2$$)};
-   };
-   var split = function (_p7) {
-      var _p8 = _p7;
-      var _p11 = _p8._1;
-      var _p10 = _p8._0;
-      var _p9 = $Basics.snd(next(_p8));
-      var t1 = _p9._0;
-      var t2 = _p9._1;
-      var new_s2 = _U.eq(_p11,1) ? magicNum7 - 1 : _p11 - 1;
-      var new_s1 = _U.eq(_p10,magicNum6 - 1) ? 1 : _p10 + 1;
-      return {ctor: "_Tuple2",_0: A2(State,new_s1,t2),_1: A2(State,t1,new_s2)};
-   };
-   var initialSeed = function (n) {    return Seed({state: initState(n),next: next,split: split,range: range});};
-   var Generator = function (a) {    return {ctor: "Generator",_0: a};};
-   var andThen = F2(function (_p12,callback) {
-      var _p13 = _p12;
-      return Generator(function (seed) {
-         var _p14 = _p13._0(seed);
-         var result = _p14._0;
-         var newSeed = _p14._1;
-         var _p15 = callback(result);
-         var genB = _p15._0;
-         return genB(newSeed);
-      });
-   });
-   var map5 = F6(function (func,_p20,_p19,_p18,_p17,_p16) {
-      var _p21 = _p20;
-      var _p22 = _p19;
-      var _p23 = _p18;
-      var _p24 = _p17;
-      var _p25 = _p16;
-      return Generator(function (seed0) {
-         var _p26 = _p21._0(seed0);
-         var a = _p26._0;
-         var seed1 = _p26._1;
-         var _p27 = _p22._0(seed1);
-         var b = _p27._0;
-         var seed2 = _p27._1;
-         var _p28 = _p23._0(seed2);
-         var c = _p28._0;
-         var seed3 = _p28._1;
-         var _p29 = _p24._0(seed3);
-         var d = _p29._0;
-         var seed4 = _p29._1;
-         var _p30 = _p25._0(seed4);
-         var e = _p30._0;
-         var seed5 = _p30._1;
-         return {ctor: "_Tuple2",_0: A5(func,a,b,c,d,e),_1: seed5};
-      });
-   });
-   var map4 = F5(function (func,_p34,_p33,_p32,_p31) {
-      var _p35 = _p34;
-      var _p36 = _p33;
-      var _p37 = _p32;
-      var _p38 = _p31;
-      return Generator(function (seed0) {
-         var _p39 = _p35._0(seed0);
-         var a = _p39._0;
-         var seed1 = _p39._1;
-         var _p40 = _p36._0(seed1);
-         var b = _p40._0;
-         var seed2 = _p40._1;
-         var _p41 = _p37._0(seed2);
-         var c = _p41._0;
-         var seed3 = _p41._1;
-         var _p42 = _p38._0(seed3);
-         var d = _p42._0;
-         var seed4 = _p42._1;
-         return {ctor: "_Tuple2",_0: A4(func,a,b,c,d),_1: seed4};
-      });
-   });
-   var map3 = F4(function (func,_p45,_p44,_p43) {
-      var _p46 = _p45;
-      var _p47 = _p44;
-      var _p48 = _p43;
-      return Generator(function (seed0) {
-         var _p49 = _p46._0(seed0);
-         var a = _p49._0;
-         var seed1 = _p49._1;
-         var _p50 = _p47._0(seed1);
-         var b = _p50._0;
-         var seed2 = _p50._1;
-         var _p51 = _p48._0(seed2);
-         var c = _p51._0;
-         var seed3 = _p51._1;
-         return {ctor: "_Tuple2",_0: A3(func,a,b,c),_1: seed3};
-      });
-   });
-   var map2 = F3(function (func,_p53,_p52) {
-      var _p54 = _p53;
-      var _p55 = _p52;
-      return Generator(function (seed0) {
-         var _p56 = _p54._0(seed0);
-         var a = _p56._0;
-         var seed1 = _p56._1;
-         var _p57 = _p55._0(seed1);
-         var b = _p57._0;
-         var seed2 = _p57._1;
-         return {ctor: "_Tuple2",_0: A2(func,a,b),_1: seed2};
-      });
-   });
-   var map = F2(function (func,_p58) {
-      var _p59 = _p58;
-      return Generator(function (seed0) {    var _p60 = _p59._0(seed0);var a = _p60._0;var seed1 = _p60._1;return {ctor: "_Tuple2",_0: func(a),_1: seed1};});
-   });
-   var listHelp = F4(function (list,n,generate,seed) {
-      listHelp: while (true) if (_U.cmp(n,1) < 0) return {ctor: "_Tuple2",_0: $List.reverse(list),_1: seed}; else {
-            var _p61 = generate(seed);
-            var value = _p61._0;
-            var newSeed = _p61._1;
-            var _v19 = A2($List._op["::"],value,list),_v20 = n - 1,_v21 = generate,_v22 = newSeed;
-            list = _v19;
-            n = _v20;
-            generate = _v21;
-            seed = _v22;
-            continue listHelp;
-         }
-   });
-   var list = F2(function (n,_p62) {    var _p63 = _p62;return Generator(function (seed) {    return A4(listHelp,_U.list([]),n,_p63._0,seed);});});
-   var pair = F2(function (genA,genB) {    return A3(map2,F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),genA,genB);});
-   var minInt = -2147483648;
-   var maxInt = 2147483647;
-   var iLogBase = F2(function (b,i) {    return _U.cmp(i,b) < 0 ? 1 : 1 + A2(iLogBase,b,i / b | 0);});
-   var $int = F2(function (a,b) {
-      return Generator(function (_p64) {
-         var _p65 = _p64;
-         var _p70 = _p65._0;
-         var base = 2147483561;
-         var f = F3(function (n,acc,state) {
-            f: while (true) {
-               var _p66 = n;
-               if (_p66 === 0) {
-                     return {ctor: "_Tuple2",_0: acc,_1: state};
-                  } else {
-                     var _p67 = _p70.next(state);
-                     var x = _p67._0;
-                     var state$ = _p67._1;
-                     var _v26 = n - 1,_v27 = x + acc * base,_v28 = state$;
-                     n = _v26;
-                     acc = _v27;
-                     state = _v28;
-                     continue f;
-                  }
-            }
-         });
-         var _p68 = _U.cmp(a,b) < 0 ? {ctor: "_Tuple2",_0: a,_1: b} : {ctor: "_Tuple2",_0: b,_1: a};
-         var lo = _p68._0;
-         var hi = _p68._1;
-         var k = hi - lo + 1;
-         var n = A2(iLogBase,base,k);
-         var _p69 = A3(f,n,1,_p70.state);
-         var v = _p69._0;
-         var state$ = _p69._1;
-         return {ctor: "_Tuple2",_0: lo + A2($Basics._op["%"],v,k),_1: Seed(_U.update(_p70,{state: state$}))};
-      });
-   });
-   var $float = F2(function (a,b) {
-      return Generator(function (seed) {
-         var _p71 = A2(generate,A2($int,minInt,maxInt),seed);
-         var number = _p71._0;
-         var newSeed = _p71._1;
-         var negativeOneToOne = $Basics.toFloat(number) / $Basics.toFloat(maxInt - minInt);
-         var _p72 = _U.cmp(a,b) < 0 ? {ctor: "_Tuple2",_0: a,_1: b} : {ctor: "_Tuple2",_0: b,_1: a};
-         var lo = _p72._0;
-         var hi = _p72._1;
-         var scaled = (lo + hi) / 2 + (hi - lo) * negativeOneToOne;
-         return {ctor: "_Tuple2",_0: scaled,_1: newSeed};
-      });
-   });
-   var bool = A2(map,F2(function (x,y) {    return _U.eq(x,y);})(1),A2($int,0,1));
-   return _elm.Random.values = {_op: _op
-                               ,bool: bool
-                               ,$int: $int
-                               ,$float: $float
-                               ,list: list
-                               ,pair: pair
-                               ,map: map
-                               ,map2: map2
-                               ,map3: map3
-                               ,map4: map4
-                               ,map5: map5
-                               ,andThen: andThen
-                               ,minInt: minInt
-                               ,maxInt: maxInt
-                               ,generate: generate
-                               ,initialSeed: initialSeed};
-};
 Elm.Window = Elm.Window || {};
 Elm.Window.make = function (_elm) {
    "use strict";
@@ -8751,203 +8524,6 @@ Elm.Window.make = function (_elm) {
    var width = A2($Signal.map,$Basics.fst,dimensions);
    var height = A2($Signal.map,$Basics.snd,dimensions);
    return _elm.Window.values = {_op: _op,dimensions: dimensions,width: width,height: height};
-};
-Elm.Native.Effects = {};
-Elm.Native.Effects.make = function(localRuntime) {
-
-	localRuntime.Native = localRuntime.Native || {};
-	localRuntime.Native.Effects = localRuntime.Native.Effects || {};
-	if (localRuntime.Native.Effects.values)
-	{
-		return localRuntime.Native.Effects.values;
-	}
-
-	var Task = Elm.Native.Task.make(localRuntime);
-	var Utils = Elm.Native.Utils.make(localRuntime);
-	var Signal = Elm.Signal.make(localRuntime);
-	var List = Elm.Native.List.make(localRuntime);
-
-
-	// polyfill so things will work even if rAF is not available for some reason
-	var _requestAnimationFrame =
-		typeof requestAnimationFrame !== 'undefined'
-			? requestAnimationFrame
-			: function(cb) { setTimeout(cb, 1000 / 60); }
-			;
-
-
-	// batchedSending and sendCallback implement a small state machine in order
-	// to schedule only one send(time) call per animation frame.
-	//
-	// Invariants:
-	// 1. In the NO_REQUEST state, there is never a scheduled sendCallback.
-	// 2. In the PENDING_REQUEST and EXTRA_REQUEST states, there is always exactly
-	//    one scheduled sendCallback.
-	var NO_REQUEST = 0;
-	var PENDING_REQUEST = 1;
-	var EXTRA_REQUEST = 2;
-	var state = NO_REQUEST;
-	var messageArray = [];
-
-
-	function batchedSending(address, tickMessages)
-	{
-		// insert ticks into the messageArray
-		var foundAddress = false;
-
-		for (var i = messageArray.length; i--; )
-		{
-			if (messageArray[i].address === address)
-			{
-				foundAddress = true;
-				messageArray[i].tickMessages = A3(List.foldl, List.cons, messageArray[i].tickMessages, tickMessages);
-				break;
-			}
-		}
-
-		if (!foundAddress)
-		{
-			messageArray.push({ address: address, tickMessages: tickMessages });
-		}
-
-		// do the appropriate state transition
-		switch (state)
-		{
-			case NO_REQUEST:
-				_requestAnimationFrame(sendCallback);
-				state = PENDING_REQUEST;
-				break;
-			case PENDING_REQUEST:
-				state = PENDING_REQUEST;
-				break;
-			case EXTRA_REQUEST:
-				state = PENDING_REQUEST;
-				break;
-		}
-	}
-
-
-	function sendCallback(time)
-	{
-		switch (state)
-		{
-			case NO_REQUEST:
-				// This state should not be possible. How can there be no
-				// request, yet somehow we are actively fulfilling a
-				// request?
-				throw new Error(
-					'Unexpected send callback.\n' +
-					'Please report this to <https://github.com/evancz/elm-effects/issues>.'
-				);
-
-			case PENDING_REQUEST:
-				// At this point, we do not *know* that another frame is
-				// needed, but we make an extra request to rAF just in
-				// case. It's possible to drop a frame if rAF is called
-				// too late, so we just do it preemptively.
-				_requestAnimationFrame(sendCallback);
-				state = EXTRA_REQUEST;
-
-				// There's also stuff we definitely need to send.
-				send(time);
-				return;
-
-			case EXTRA_REQUEST:
-				// Turns out the extra request was not needed, so we will
-				// stop calling rAF. No reason to call it all the time if
-				// no one needs it.
-				state = NO_REQUEST;
-				return;
-		}
-	}
-
-
-	function send(time)
-	{
-		for (var i = messageArray.length; i--; )
-		{
-			var messages = A3(
-				List.foldl,
-				F2( function(toAction, list) { return List.Cons(toAction(time), list); } ),
-				List.Nil,
-				messageArray[i].tickMessages
-			);
-			Task.perform( A2(Signal.send, messageArray[i].address, messages) );
-		}
-		messageArray = [];
-	}
-
-
-	function requestTickSending(address, tickMessages)
-	{
-		return Task.asyncFunction(function(callback) {
-			batchedSending(address, tickMessages);
-			callback(Task.succeed(Utils.Tuple0));
-		});
-	}
-
-
-	return localRuntime.Native.Effects.values = {
-		requestTickSending: F2(requestTickSending)
-	};
-
-};
-
-Elm.Effects = Elm.Effects || {};
-Elm.Effects.make = function (_elm) {
-   "use strict";
-   _elm.Effects = _elm.Effects || {};
-   if (_elm.Effects.values) return _elm.Effects.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Native$Effects = Elm.Native.Effects.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $Task = Elm.Task.make(_elm),
-   $Time = Elm.Time.make(_elm);
-   var _op = {};
-   var ignore = function (task) {    return A2($Task.map,$Basics.always({ctor: "_Tuple0"}),task);};
-   var requestTickSending = $Native$Effects.requestTickSending;
-   var toTaskHelp = F3(function (address,effect,_p0) {
-      var _p1 = _p0;
-      var _p5 = _p1._1;
-      var _p4 = _p1;
-      var _p3 = _p1._0;
-      var _p2 = effect;
-      switch (_p2.ctor)
-      {case "Task": var reporter = A2($Task.andThen,_p2._0,function (answer) {    return A2($Signal.send,address,_U.list([answer]));});
-           return {ctor: "_Tuple2",_0: A2($Task.andThen,_p3,$Basics.always(ignore($Task.spawn(reporter)))),_1: _p5};
-         case "Tick": return {ctor: "_Tuple2",_0: _p3,_1: A2($List._op["::"],_p2._0,_p5)};
-         case "None": return _p4;
-         default: return A3($List.foldl,toTaskHelp(address),_p4,_p2._0);}
-   });
-   var toTask = F2(function (address,effect) {
-      var _p6 = A3(toTaskHelp,address,effect,{ctor: "_Tuple2",_0: $Task.succeed({ctor: "_Tuple0"}),_1: _U.list([])});
-      var combinedTask = _p6._0;
-      var tickMessages = _p6._1;
-      return $List.isEmpty(tickMessages) ? combinedTask : A2($Task.andThen,combinedTask,$Basics.always(A2(requestTickSending,address,tickMessages)));
-   });
-   var Never = function (a) {    return {ctor: "Never",_0: a};};
-   var Batch = function (a) {    return {ctor: "Batch",_0: a};};
-   var batch = Batch;
-   var None = {ctor: "None"};
-   var none = None;
-   var Tick = function (a) {    return {ctor: "Tick",_0: a};};
-   var tick = Tick;
-   var Task = function (a) {    return {ctor: "Task",_0: a};};
-   var task = Task;
-   var map = F2(function (func,effect) {
-      var _p7 = effect;
-      switch (_p7.ctor)
-      {case "Task": return Task(A2($Task.map,func,_p7._0));
-         case "Tick": return Tick(function (_p8) {    return func(_p7._0(_p8));});
-         case "None": return None;
-         default: return Batch(A2($List.map,map(func),_p7._0));}
-   });
-   return _elm.Effects.values = {_op: _op,none: none,task: task,tick: tick,map: map,batch: batch,toTask: toTask};
 };
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
@@ -11106,11 +10682,11 @@ Elm.Html.Events.make = function (_elm) {
                                     ,keyCode: keyCode
                                     ,Options: Options};
 };
-Elm.Root = Elm.Root || {};
-Elm.Root.make = function (_elm) {
+Elm.Csscolors = Elm.Csscolors || {};
+Elm.Csscolors.make = function (_elm) {
    "use strict";
-   _elm.Root = _elm.Root || {};
-   if (_elm.Root.values) return _elm.Root.values;
+   _elm.Csscolors = _elm.Csscolors || {};
+   if (_elm.Csscolors.values) return _elm.Csscolors.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
@@ -11119,8 +10695,10 @@ Elm.Root.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var root = "./";
-   return _elm.Root.values = {_op: _op,root: root};
+   var pointColor = "#b0a69a";
+   var backgroundColor$ = "#030e0c";
+   var backgroundColor = "#030907";
+   return _elm.Csscolors.values = {_op: _op,backgroundColor: backgroundColor,backgroundColor$: backgroundColor$,pointColor: pointColor};
 };
 Elm.Types = Elm.Types || {};
 Elm.Types.make = function (_elm) {
@@ -11137,15 +10715,59 @@ Elm.Types.make = function (_elm) {
    var _op = {};
    var frege = {x: -150
                ,y: -150
-               ,a: 0
-               ,vx: 0
-               ,vy: 0
-               ,va: -0.1
-               ,tileX: 0
-               ,tileY: 0
+               ,a: 20
+               ,vx: -2.4275
+               ,vy: 4.472
+               ,va: -2
+               ,tileX: 45
+               ,tileY: 4
+               ,fuel: 1410.1
+               ,oxygen: 166
+               ,weight: 852
                ,thrusters: {leftFront: 0,leftSide: 0,leftBack: 0,main: 0,rightFront: 0,rightSide: 0,rightBack: 0,boost: false}};
-   var Ship = F9(function (a,b,c,d,e,f,g,h,i) {    return {x: a,y: b,a: c,vx: d,vy: e,va: f,tileX: g,tileY: h,thrusters: i};});
+   var Ship = function (a) {
+      return function (b) {
+         return function (c) {
+            return function (d) {
+               return function (e) {
+                  return function (f) {
+                     return function (g) {
+                        return function (h) {
+                           return function (i) {
+                              return function (j) {
+                                 return function (k) {
+                                    return function (l) {
+                                       return {x: a,y: b,a: c,vx: d,vy: e,va: f,tileX: g,tileY: h,fuel: i,oxygen: j,weight: k,thrusters: l};
+                                    };
+                                 };
+                              };
+                           };
+                        };
+                     };
+                  };
+               };
+            };
+         };
+      };
+   };
    return _elm.Types.values = {_op: _op,Ship: Ship,frege: frege};
+};
+Elm.Source = Elm.Source || {};
+Elm.Source.make = function (_elm) {
+   "use strict";
+   _elm.Source = _elm.Source || {};
+   if (_elm.Source.values) return _elm.Source.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var root = "./";
+   var src = function (str) {    return A2($Basics._op["++"],root,A2($Basics._op["++"],str,".png"));};
+   return _elm.Source.values = {_op: _op,root: root,src: src};
 };
 Elm.DrawLander = Elm.DrawLander || {};
 Elm.DrawLander.make = function (_elm) {
@@ -11160,71 +10782,67 @@ Elm.DrawLander.make = function (_elm) {
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Root = Elm.Root.make(_elm),
    $Signal = Elm.Signal.make(_elm),
+   $Source = Elm.Source.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
-   var drawStrafer = function (str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,str));};
-   var drawRotator = function (str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,str));};
-   var imager = F3(function (w,h,str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,w,h,str));});
-   var src = function (str) {    return A2($Basics._op["++"],$Root.root,A2($Basics._op["++"],str,".png"));};
    var mainThruster = F2(function (firing,boost) {
-      var blast = boost ? src("blast_main-1") : src("blast_main-weak");
+      var blast = boost ? $Source.src("blast_main-1") : $Source.src("blast_main-weak");
       return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 0,_1: -30},
       $Graphics$Collage.toForm(A3($Graphics$Element.image,11,30,blast)))]) : _U.list([]);
    });
-   var leftFront = F2(function (firing,boost) {
-      var blast = boost ? src("blast_yaw") : src("blast_yaw-weak");
-      return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -19,_1: 9},drawRotator(blast))]) : _U.list([]);
-   });
-   var leftBack = F2(function (firing,boost) {
-      var blast = boost ? src("blast_yaw_f") : src("blast_yaw_f-weak");
-      return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: -19,_1: -9},
-      A2($Graphics$Collage.scale,-1,drawRotator(blast)))]) : _U.list([]);
-   });
+   var drawStrafer = function (str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,str));};
    var leftSide = F2(function (firing,boost) {
-      var blast = boost ? src("blast_strafe") : src("blast_strafe-weak");
+      var blast = boost ? $Source.src("blast_strafe") : $Source.src("blast_strafe-weak");
       return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 25,_1: -1},
       A2($Graphics$Collage.rotate,$Basics.degrees(180),drawStrafer(blast)))]) : _U.list([]);
    });
    var rightSide = F2(function (firing,boost) {
-      var blast = boost ? src("blast_strafe") : src("blast_strafe-weak");
+      var blast = boost ? $Source.src("blast_strafe") : $Source.src("blast_strafe-weak");
       return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -23,_1: -1},drawStrafer(blast))]) : _U.list([]);
    });
+   var drawRotator = function (str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,str));};
+   var leftFront = F2(function (firing,boost) {
+      var blast = boost ? $Source.src("blast_yaw") : $Source.src("blast_yaw-weak");
+      return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -19,_1: 9},drawRotator(blast))]) : _U.list([]);
+   });
+   var leftBack = F2(function (firing,boost) {
+      var blast = boost ? $Source.src("blast_yaw_f") : $Source.src("blast_yaw_f-weak");
+      return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,
+      {ctor: "_Tuple2",_0: -19,_1: -9},
+      A2($Graphics$Collage.scale,-1,drawRotator(blast)))]) : _U.list([]);
+   });
    var rightFront = F2(function (firing,boost) {
-      var blast = boost ? src("blast_yaw_f") : src("blast_yaw_f-weak");
+      var blast = boost ? $Source.src("blast_yaw_f") : $Source.src("blast_yaw_f-weak");
       return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 19,_1: 9},
       A2($Graphics$Collage.rotate,$Basics.degrees(180),A2($Graphics$Collage.scale,-1,drawRotator(blast))))]) : _U.list([]);
    });
    var rightBack = F2(function (firing,boost) {
-      var blast = boost ? src("blast_yaw") : src("blast_yaw_f-weak");
+      var blast = boost ? $Source.src("blast_yaw") : $Source.src("blast_yaw_f-weak");
       return _U.cmp(firing,1) > -1 ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 19,_1: -9},
       A2($Graphics$Collage.rotate,$Basics.degrees(180),drawRotator(blast)))]) : _U.list([]);
    });
+   var imager = F3(function (w,h,str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,w,h,str));});
    var drawLander = function (s) {
       var t = s.thrusters;
-      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
-      138,
-      138,
-      A3($List.foldr,
-      $List.append,
-      _U.list([]),
-      _U.list([A2(rightSide,t.rightSide,t.boost)
-              ,A2(leftSide,t.leftSide,t.boost)
-              ,A2(rightBack,t.rightBack,t.boost)
-              ,A2(leftBack,t.leftBack,t.boost)
-              ,A2(rightFront,t.rightFront,t.boost)
-              ,A2(leftFront,t.leftFront,t.boost)
-              ,A2(mainThruster,t.main,t.boost)
-              ,_U.list([A3(imager,47,48,"./lander.png")])]))));
+      var lander = _U.cmp(s.fuel,0) > 0 ? _U.list([A2(rightSide,t.rightSide,t.boost)
+                                                  ,A2(leftSide,t.leftSide,t.boost)
+                                                  ,A2(rightBack,t.rightBack,t.boost)
+                                                  ,A2(leftBack,t.leftBack,t.boost)
+                                                  ,A2(rightFront,t.rightFront,t.boost)
+                                                  ,A2(leftFront,t.leftFront,t.boost)
+                                                  ,A2(mainThruster,t.main,t.boost)
+                                                  ,_U.list([A3(imager,47,48,$Source.src("lander"))])]) : _U.list([_U.list([A3(imager,
+      47,
+      48,
+      $Source.src("lander"))])]);
+      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,138,138,A3($List.foldr,$List.append,_U.list([]),lander)));
    };
    return _elm.DrawLander.values = {_op: _op
-                                   ,src: src
                                    ,imager: imager
                                    ,drawRotator: drawRotator
                                    ,drawStrafer: drawStrafer
@@ -11250,7 +10868,52 @@ Elm.World.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var world = _U.list(["eeeepeeee","epeeeeeee","eeeeeeeee","eeeeeeeee","eeeeeeeee","eeeeeeeee","eeeeeeeee","eeeeeeeee","eeeeeeeee"]);
+   var world = _U.list(["....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,".......p............................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."
+                       ,"....................................................."]);
    return _elm.World.values = {_op: _op,world: world};
 };
 Elm.HUD = Elm.HUD || {};
@@ -11260,8 +10923,10 @@ Elm.HUD.make = function (_elm) {
    if (_elm.HUD.values) return _elm.HUD.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Csscolors = Elm.Csscolors.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $List = Elm.List.make(_elm),
@@ -11271,29 +10936,118 @@ Elm.HUD.make = function (_elm) {
    $String = Elm.String.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
+   var round$ = function (f) {    return $Basics.toFloat($Basics.round(f * 10)) / 10;};
    var cut = F2(function (limit,str) {    return _U.cmp($String.length(str),limit) > 0 ? A3($String.slice,0,limit,str) : str;});
-   var nf = function (f) {    return A2(cut,6,$Basics.toString(f));};
-   _op[":::"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
-   var readOut = function (s) {    return _U.list([A2(_op[":::"],"Ang Vel : ",nf(s.va)),A2(_op[":::"],"Angle : ",nf(s.a / 90))]);};
-   var text = $Html.text;
+   var nf = function (f) {    return A2(cut,8,$Basics.toString(f));};
+   var pf = F2(function (t,p) {    return nf((p + 250 + $Basics.toFloat(t) * 500) / 10);});
+   _op["."] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
+   var readOut = function (s) {
+      return $List.unzip(_U.list([A2(_op["."],"--------","--------")
+                                 ,A2(_op["."],"STATUS","NOMINAL")
+                                 ,A2(_op["."],"--------","--------")
+                                 ,A2(_op["."],"ang vel ",nf(0 - s.va * 10))
+                                 ,A2(_op["."],"velocity",nf(Math.pow(Math.pow(s.vx,2) + Math.pow(s.vy,2),0.5) / 10))
+                                 ,A2(_op["."],"position","--------")
+                                 ,A2(_op["."],": angle",nf(0 - s.a / 0.9))
+                                 ,A2(_op["."],": x",A2(pf,s.tileX,s.x))
+                                 ,A2(_op["."],": y",A2(pf,s.tileY,s.y))
+                                 ,A2(_op["."],"--------","--------")
+                                 ,A2(_op["."],"FUEL",A2($Basics._op["++"],A2(cut,6,$Basics.toString(round$(s.fuel))),"l"))
+                                 ,A2(_op["."],"OXYGEN",A2($Basics._op["++"],A2(cut,6,$Basics.toString($Basics.round(s.oxygen))),"l"))
+                                 ,A2(_op["."],"WEIGHT",A2($Basics._op["++"],A2(cut,6,$Basics.toString($Basics.round(s.weight)))," yH"))]));
+   };
+   var point = function (str) {
+      return A2($Html.p,_U.list([$Html$Attributes.$class("point"),$Html$Attributes.style(_U.list([A2(_op["."],"width","110px")]))]),_U.list([$Html.text(str)]));
+   };
    var hud = function (s) {
+      var colStyle = _U.list([$Html$Attributes.style(_U.list([A2(_op["."],"float","left")]))]);
+      var _p0 = readOut(s);
+      var keys = _p0._0;
+      var values = _p0._1;
       return A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: 260,_1: 250},
+      {ctor: "_Tuple2",_0: 260,_1: 45},
       $Graphics$Collage.toForm(A3($Html.toElement,
       0,
       0,
       A2($Html.div,
-      _U.list([$Html$Attributes.style(_U.list([A2(_op[":::"],"background-color","#030907")
-                                              ,A2(_op[":::"],"padding","1em")
-                                              ,A2(_op[":::"],"width","400px")
-                                              ,A2(_op[":::"],"height","500px")]))]),
-      _U.list([A2($Html.p,_U.list([$Html$Attributes.$class("point")]),_U.list([text("STATUS NOMINAL")]))
-              ,A2($Html.p,_U.list([$Html$Attributes.$class("point")]),_U.list([text(A2($Basics._op["++"],"Vel Ang : ",A2(cut,6,$Basics.toString(s.va))))]))
-              ,A2($Html.p,
-              _U.list([$Html$Attributes.$class("point")]),
-              _U.list([text(A2($Basics._op["++"],"Angle : ",A2(cut,6,$Basics.toString(s.a / 90))))]))])))));
+      _U.list([$Html$Attributes.style(_U.list([A2(_op["."],"background-color",$Csscolors.backgroundColor)
+                                              ,A2(_op["."],"border-style","solid")
+                                              ,A2(_op["."],"border-width","2px")
+                                              ,A2(_op["."],"border-color",$Csscolors.pointColor)
+                                              ,A2(_op["."],"padding","1em")
+                                              ,A2(_op["."],"width","220px")
+                                              ,A2(_op["."],"height","290px")]))]),
+      _U.list([A2($Html.p,_U.list([$Html$Attributes.$class("point")]),_U.list([$Html.text("READ OUT")]))
+              ,A2($Html.div,colStyle,A2($List.map,point,keys))
+              ,A2($Html.div,colStyle,A2($List.map,point,values))])))));
    };
-   return _elm.HUD.values = {_op: _op,text: text,cut: cut,nf: nf,readOut: readOut,hud: hud};
+   var keys = $Graphics$Collage.toForm(A3($Html.toElement,
+   0,
+   0,
+   A2($Html.div,
+   _U.list([$Html$Attributes.style(_U.list([A2(_op["."],"background-color",$Csscolors.backgroundColor)
+                                           ,A2(_op["."],"border-style","solid")
+                                           ,A2(_op["."],"border-width","2px")
+                                           ,A2(_op["."],"border-color",$Csscolors.pointColor)
+                                           ,A2(_op["."],"padding","1em")
+                                           ,A2(_op["."],"width","156px")
+                                           ,A2(_op["."],"height","131px")]))]),
+   _U.list([$Html.fromElement(A3($Graphics$Element.image,156,131,"./key_diagram.png"))]))));
+   return _elm.HUD.values = {_op: _op,cut: cut,nf: nf,pf: pf,round$: round$,readOut: readOut,point: point,hud: hud,keys: keys};
+};
+Elm.Minimap = Elm.Minimap || {};
+Elm.Minimap.make = function (_elm) {
+   "use strict";
+   _elm.Minimap = _elm.Minimap || {};
+   if (_elm.Minimap.values) return _elm.Minimap.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Csscolors = Elm.Csscolors.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Source = Elm.Source.make(_elm),
+   $Types = Elm.Types.make(_elm);
+   var _op = {};
+   _op["."] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
+   var minimap = function (s) {
+      var y = ($Basics.toFloat(s.tileY) * 500 + 250 + s.y) / 110;
+      var x = ($Basics.toFloat(s.tileX) * 500 + 250 + s.x) / 110;
+      return A2($Graphics$Collage.move,
+      {ctor: "_Tuple2",_0: 260,_1: 298},
+      $Graphics$Collage.toForm(A3($Html.toElement,
+      0,
+      0,
+      A2($Html.div,
+      _U.list([$Html$Attributes.style(_U.list([A2(_op["."],"background-color",$Csscolors.backgroundColor$)
+                                              ,A2(_op["."],"border-style","solid")
+                                              ,A2(_op["."],"border-width","2px")
+                                              ,A2(_op["."],"border-color",$Csscolors.pointColor)
+                                              ,A2(_op["."],"padding","1em")
+                                              ,A2(_op["."],"width","220px")
+                                              ,A2(_op["."],"height","220px")]))]),
+      _U.list([$Html.fromElement(A3($Graphics$Collage.collage,
+      220,
+      220,
+      _U.list([A2($Graphics$Collage.move,
+              {ctor: "_Tuple2",_0: -50,_1: 0},
+              A2($Graphics$Collage.rotate,
+              $Basics.degrees(0),
+              A2($Graphics$Collage.alpha,5.0e-2,$Graphics$Collage.toForm(A3($Graphics$Element.image,160,125,$Source.src("real-stars"))))))
+              ,A2($Graphics$Collage.move,
+              {ctor: "_Tuple2",_0: x - 110,_1: y - 110},
+              $Graphics$Collage.toForm(A3($Graphics$Element.image,2,2,$Source.src("lander"))))
+              ,A2($Graphics$Collage.move,
+              {ctor: "_Tuple2",_0: -79.6,_1: 82},
+              $Graphics$Collage.toForm(A3($Graphics$Element.image,10,10,$Source.src("stars-aseprite-2"))))])))])))));
+   };
+   return _elm.Minimap.values = {_op: _op,minimap: minimap};
 };
 Elm.Frame = Elm.Frame || {};
 Elm.Frame.make = function (_elm) {
@@ -11310,13 +11064,14 @@ Elm.Frame.make = function (_elm) {
    $HUD = Elm.HUD.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
+   $Minimap = Elm.Minimap.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
+   $Source = Elm.Source.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
-   var bar = F3(function (w,h,cor) {
-      return A2($Graphics$Collage.move,cor,A2($Graphics$Collage.filled,A3($Color.rgb,11,7,43),A2($Graphics$Collage.rect,w,h)));
-   });
+   var barBlue = A3($Color.rgb,5,3,21);
+   var bar = F3(function (w,h,cor) {    return A2($Graphics$Collage.move,cor,A2($Graphics$Collage.filled,barBlue,A2($Graphics$Collage.rect,w,h)));});
    var blinders = function (_p0) {
       var _p1 = _p0;
       var _p3 = _p1._0;
@@ -11341,13 +11096,18 @@ Elm.Frame.make = function (_elm) {
       return A3($Graphics$Collage.collage,
       _p7,
       _p6,
+      _U.list([$Graphics$Collage.toForm(A3($Graphics$Collage.collage,
+      _p7,
+      _p6,
       _U.list([A2($Graphics$Collage.rotate,$Basics.degrees(0 - s.a),world)
-              ,$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./scope.png"))
+              ,$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,$Source.src("scope")))
               ,blinders({ctor: "_Tuple2",_0: _p7,_1: _p6})
               ,$HUD.hud(s)
-              ,$DrawLander.drawLander(s)]));
+              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -450,_1: 78},$HUD.keys)
+              ,$Minimap.minimap(s)
+              ,$DrawLander.drawLander(s)])))]));
    });
-   return _elm.Frame.values = {_op: _op,bar: bar,blinders: blinders,frame: frame};
+   return _elm.Frame.values = {_op: _op,barBlue: barBlue,bar: bar,blinders: blinders,frame: frame};
 };
 Elm.KeyCodes = Elm.KeyCodes || {};
 Elm.KeyCodes.make = function (_elm) {
@@ -11372,51 +11132,6 @@ Elm.KeyCodes.make = function (_elm) {
    var e = 69;
    return _elm.KeyCodes.values = {_op: _op,e: e,s: s,c: c,u: u,k: k,n: n,space: space,shift: shift};
 };
-Elm.Thrusters = Elm.Thrusters || {};
-Elm.Thrusters.make = function (_elm) {
-   "use strict";
-   _elm.Thrusters = _elm.Thrusters || {};
-   if (_elm.Thrusters.values) return _elm.Thrusters.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $Types = Elm.Types.make(_elm);
-   var _op = {};
-   var boost = function (b) {    return b ? 5 : 1;};
-   var rtc = 0.5;
-   var weakPower = 0.128;
-   var mainPower = weakPower * 7;
-   var tf = $Basics.toFloat;
-   var deltaY = function (s) {
-      var s$ = $Basics.sin($Basics.degrees(s.a));
-      var c$ = $Basics.cos($Basics.degrees(s.a));
-      var t = s.thrusters;
-      return (mainPower * c$ * tf(t.main) + weakPower * c$ * tf(t.leftBack) + (0 - weakPower) * c$ * tf(t.leftFront) + weakPower * c$ * tf(t.rightBack) + (0 - weakPower) * c$ * tf(t.rightFront) + (0 - weakPower) * s$ * tf(t.leftSide) + weakPower * s$ * tf(t.rightSide)) * boost(t.boost);
-   };
-   var deltaX = function (s) {
-      var s$ = $Basics.sin($Basics.degrees(s.a));
-      var c$ = $Basics.cos($Basics.degrees(s.a));
-      var t = s.thrusters;
-      return ((0 - mainPower) * s$ * tf(t.main) + (0 - weakPower) * s$ * tf(t.leftBack) + weakPower * s$ * tf(t.leftFront) + (0 - weakPower) * s$ * tf(t.rightBack) + weakPower * s$ * tf(t.rightFront) + (0 - weakPower) * c$ * tf(t.leftSide) + weakPower * c$ * tf(t.rightSide)) * boost(t.boost);
-   };
-   var deltaAngular = function (s) {
-      var t = s.thrusters;
-      return ((0 - weakPower) * rtc * tf(t.leftBack) + weakPower * rtc * tf(t.leftFront) + weakPower * rtc * tf(t.rightBack) + (0 - weakPower) * rtc * tf(t.rightFront)) * boost(t.boost);
-   };
-   return _elm.Thrusters.values = {_op: _op
-                                  ,tf: tf
-                                  ,weakPower: weakPower
-                                  ,mainPower: mainPower
-                                  ,rtc: rtc
-                                  ,boost: boost
-                                  ,deltaY: deltaY
-                                  ,deltaX: deltaX
-                                  ,deltaAngular: deltaAngular};
-};
 Elm.View = Elm.View || {};
 Elm.View.make = function (_elm) {
    "use strict";
@@ -11428,41 +11143,76 @@ Elm.View.make = function (_elm) {
    $Frame = Elm.Frame.make(_elm),
    $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
    $Graphics$Element = Elm.Graphics.Element.make(_elm),
-   $Html = Elm.Html.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
-   $Types = Elm.Types.make(_elm);
+   $Source = Elm.Source.make(_elm),
+   $String = Elm.String.make(_elm),
+   $Types = Elm.Types.make(_elm),
+   $World = Elm.World.make(_elm);
    var _op = {};
-   var reposition = F3(function (_p0,s,world) {
+   var backdrop = F3(function (_p0,s,world) {
       var _p1 = _p0;
+      var y = $Basics.toFloat(s.tileY) * 500 + 250 + s.y;
+      var x = $Basics.toFloat(s.tileX) * 500 + 50 + s.x;
+      var pos = {ctor: "_Tuple2",_0: (0 - x) * 5.0e-3,_1: (0 - y) * 5.0e-3};
       return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
-      _p1._0,
-      _p1._1,
-      _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 0 - s.x,_1: 0 - s.y},world)])));
+      1000,
+      1000,
+      _U.list([A2($Graphics$Collage.move,
+              pos,
+              A2($Graphics$Collage.alpha,5.0e-2,$Graphics$Collage.toForm(A3($Graphics$Element.image,320,250,$Source.src("real-stars")))))
+              ,world])));
    });
-   var planet = $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
-   501,
-   501,
-   _U.list([$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./stars-aseprite-3.png"))
-           ,$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./stars-aseprite-2.png"))])));
-   var stars = $Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,"./stars-aseprite-3.png"));
-   var setUp = F2(function (s,_p2) {
+   var reposition = F3(function (_p2,s,world) {
       var _p3 = _p2;
       return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
       _p3._0,
       _p3._1,
-      _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -250,_1: 250},planet)
-              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 250,_1: 250},stars)
-              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 250,_1: -250},stars)
-              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -250,_1: -250},stars)])));
+      _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 0 - s.x,_1: 0 - s.y},world)])));
+   });
+   var tile = function (t) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,$Source.src(t)));};
+   var stars = tile("stars-aseprite-6");
+   var planet = $Graphics$Collage.toForm(A3($Graphics$Collage.collage,501,501,_U.list([tile("stars-aseprite-6"),tile("stars-aseprite-2")])));
+   var tileSelector = function (str) {    return _U.eq(str,"p") ? planet : stars;};
+   var wd = $Maybe.withDefault;
+   var wd$ = wd("wd");
+   var space = F2(function (_p4,s) {
+      var _p5 = _p4;
+      var _p6 = function () {
+         var y = 45 - s.tileY;
+         var x = s.tileX;
+         var rows$ = A2($List.map,A2($String.slice,x,x + 2),A2($List.take,2,A2($List.drop,y,$World.world)));
+         return A2(F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),
+         wd$($List.head(rows$)),
+         wd$($List.head(A2(wd,_U.list([]),$List.tail(rows$)))));
+      }();
+      var top = _p6._0;
+      var bottom = _p6._1;
+      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
+      _p5._0,
+      _p5._1,
+      _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -250,_1: 250},tileSelector(A3($String.slice,0,1,top)))
+              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 250,_1: 250},tileSelector(A3($String.slice,1,2,top)))
+              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 250,_1: -250},tileSelector(A3($String.slice,1,2,bottom)))
+              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -250,_1: -250},tileSelector(A3($String.slice,0,1,bottom)))])));
    });
    var view = F2(function (d,s) {
-      return A3($Frame.frame,d,s,A3(reposition,{ctor: "_Tuple2",_0: 1000,_1: 1000},s,A2(setUp,s,{ctor: "_Tuple2",_0: 1000,_1: 1000})));
+      var ws = {ctor: "_Tuple2",_0: 1000,_1: 1000};
+      return A3($Frame.frame,d,s,A3(backdrop,ws,s,A3(reposition,ws,s,A2(space,ws,s))));
    });
-   var text = $Html.text;
-   return _elm.View.values = {_op: _op,text: text,stars: stars,planet: planet,setUp: setUp,reposition: reposition,view: view};
+   return _elm.View.values = {_op: _op
+                             ,wd: wd
+                             ,wd$: wd$
+                             ,tile: tile
+                             ,stars: stars
+                             ,planet: planet
+                             ,tileSelector: tileSelector
+                             ,space: space
+                             ,reposition: reposition
+                             ,backdrop: backdrop
+                             ,view: view};
 };
 Elm.Physics = Elm.Physics || {};
 Elm.Physics.make = function (_elm) {
@@ -11487,10 +11237,10 @@ Elm.Physics.make = function (_elm) {
    var physics = F2(function (dt,s) {
       var x$ = s.x + dt * s.vx;
       var xm = rollXLeft(rollXRight(x$));
-      var dxt = $Basics.round(xm - x$) / 500 | 0;
+      var dxt = $Basics.round(x$ - xm) / 500 | 0;
       var y$ = s.y + dt * s.vy;
       var ym = rollYBottom(rollYTop(y$));
-      var dyt = $Basics.round(ym - y$) / 500 | 0;
+      var dyt = $Basics.round(y$ - ym) / 500 | 0;
       return _U.update(s,{y: ym,x: xm,tileY: s.tileY + dyt,tileX: s.tileX + dxt,a: rollAngleCC(rollAngleC(s.a + dt * s.va))});
    });
    return _elm.Physics.values = {_op: _op
@@ -11502,35 +11252,117 @@ Elm.Physics.make = function (_elm) {
                                 ,rollAngleCC: rollAngleCC
                                 ,physics: physics};
 };
-Elm.Main = Elm.Main || {};
-Elm.Main.make = function (_elm) {
+Elm.Thrusters = Elm.Thrusters || {};
+Elm.Thrusters.make = function (_elm) {
    "use strict";
-   _elm.Main = _elm.Main || {};
-   if (_elm.Main.values) return _elm.Main.values;
+   _elm.Thrusters = _elm.Thrusters || {};
+   if (_elm.Thrusters.values) return _elm.Thrusters.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
-   $Graphics$Element = Elm.Graphics.Element.make(_elm),
-   $KeyCodes = Elm.KeyCodes.make(_elm),
-   $Keyboard = Elm.Keyboard.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
-   $Physics = Elm.Physics.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Types = Elm.Types.make(_elm);
+   var _op = {};
+   var boost = function (b) {    return b ? 5 : 1;};
+   var rtc = 0.5;
+   var weakPower = 0.128;
+   var mainPower = weakPower * 7;
+   var tf = $Basics.toFloat;
+   var deltaY = function (s) {
+      var s$ = $Basics.sin($Basics.degrees(s.a));
+      var c$ = $Basics.cos($Basics.degrees(s.a));
+      var t = s.thrusters;
+      var b = boost(t.boost);
+      return A2(F2(function (x,y) {    return x * y;}),
+      b,
+      A3($List.foldr,
+      F2(function (x,y) {    return x + y;}),
+      0,
+      _U.list([mainPower * c$ * tf(t.main)
+              ,weakPower * c$ * tf(t.leftBack)
+              ,(0 - weakPower) * c$ * tf(t.leftFront)
+              ,weakPower * c$ * tf(t.rightBack)
+              ,(0 - weakPower) * c$ * tf(t.rightFront)
+              ,(0 - weakPower) * s$ * tf(t.leftSide)
+              ,weakPower * s$ * tf(t.rightSide)])));
+   };
+   var deltaX = function (s) {
+      var s$ = $Basics.sin($Basics.degrees(s.a));
+      var c$ = $Basics.cos($Basics.degrees(s.a));
+      var t = s.thrusters;
+      var b = boost(t.boost);
+      return A2(F2(function (x,y) {    return x * y;}),
+      b,
+      A3($List.foldr,
+      F2(function (x,y) {    return x + y;}),
+      0,
+      _U.list([(0 - mainPower) * s$ * tf(t.main)
+              ,(0 - weakPower) * s$ * tf(t.leftBack)
+              ,weakPower * s$ * tf(t.leftFront)
+              ,(0 - weakPower) * s$ * tf(t.rightBack)
+              ,weakPower * s$ * tf(t.rightFront)
+              ,(0 - weakPower) * c$ * tf(t.leftSide)
+              ,weakPower * c$ * tf(t.rightSide)])));
+   };
+   var deltaAngular = function (s) {
+      var t = s.thrusters;
+      return ((0 - weakPower) * rtc * tf(t.leftBack) + weakPower * rtc * tf(t.leftFront) + weakPower * rtc * tf(t.rightBack) + (0 - weakPower) * rtc * tf(t.rightFront)) * boost(t.boost);
+   };
+   return _elm.Thrusters.values = {_op: _op
+                                  ,tf: tf
+                                  ,weakPower: weakPower
+                                  ,mainPower: mainPower
+                                  ,rtc: rtc
+                                  ,boost: boost
+                                  ,deltaY: deltaY
+                                  ,deltaX: deltaX
+                                  ,deltaAngular: deltaAngular};
+};
+Elm.Shipupdate = Elm.Shipupdate || {};
+Elm.Shipupdate.make = function (_elm) {
+   "use strict";
+   _elm.Shipupdate = _elm.Shipupdate || {};
+   if (_elm.Shipupdate.values) return _elm.Shipupdate.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $KeyCodes = Elm.KeyCodes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Set = Elm.Set.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $Thrusters = Elm.Thrusters.make(_elm),
-   $Time = Elm.Time.make(_elm),
-   $Types = Elm.Types.make(_elm),
-   $View = Elm.View.make(_elm),
-   $Window = Elm.Window.make(_elm);
+   $Types = Elm.Types.make(_elm);
    var _op = {};
-   var input = function () {
-      var delta = A2($Signal.map,function (t) {    return t / 120;},$Time.fps(30));
-      return A2($Signal.sampleOn,delta,A3($Signal.map2,F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),delta,$Keyboard.keysDown));
-   }();
    var gravity = F2(function (dt,s) {    return _U.update(s,{vy: s.vy - dt / 50,vx: s.vx - dt / 94});});
-   var thrust = function (s) {    return _U.update(s,{vy: s.vy + $Thrusters.deltaY(s),vx: s.vx + $Thrusters.deltaX(s),va: s.va + $Thrusters.deltaAngular(s)});};
+   var oxygen = F2(function (dt,s) {    return _U.cmp(s.oxygen,0) > 0 ? _U.update(s,{oxygen: s.oxygen - dt / 150}) : _U.update(s,{oxygen: 0});});
+   var fuel = function (s) {
+      return _U.update(s,
+      {fuel: A2(F2(function (x,y) {    return x - y;}),
+      s.fuel,
+      A2(F2(function (x,y) {    return x * y;}),
+      0.1,
+      $Basics.toFloat(A3($List.foldr,
+      F2(function (x,y) {    return x + y;}),
+      0,
+      _U.list([4 * s.thrusters.main
+              ,7 * s.thrusters.leftBack
+              ,7 * s.thrusters.leftFront
+              ,7 * s.thrusters.rightBack
+              ,7 * s.thrusters.rightFront
+              ,7 * s.thrusters.leftSide
+              ,7 * s.thrusters.rightSide])))))});
+   };
+   var weight = function (s) {    return _U.update(s,{weight: 852 + s.fuel * 0.6 + s.oxygen * 3});};
+   var thrust = function (s) {
+      var wc = 1704 / s.weight;
+      return _U.cmp(s.fuel,0) > 0 ? _U.update(s,
+      {vy: s.vy + wc * $Thrusters.deltaY(s),vx: s.vx + wc * $Thrusters.deltaX(s),va: s.va + wc * $Thrusters.deltaAngular(s)}) : _U.update(s,{fuel: 0});
+   };
    var keyPressed = F2(function (key,keys) {    return A2($Set.member,key,keys) ? 1 : 0;});
    var setThrusters = F2(function (keys,s) {
       return _U.update(s,
@@ -11543,14 +11375,48 @@ Elm.Main.make = function (_elm) {
                   ,rightBack: A2(keyPressed,$KeyCodes.u,keys)
                   ,boost: A2($Set.member,$KeyCodes.shift,keys)}});
    });
-   var update = F2(function (_p0,s) {    var _p1 = _p0;return A2($Physics.physics,_p1._0,thrust(A2(setThrusters,_p1._1,s)));});
+   return _elm.Shipupdate.values = {_op: _op
+                                   ,keyPressed: keyPressed
+                                   ,thrust: thrust
+                                   ,weight: weight
+                                   ,fuel: fuel
+                                   ,oxygen: oxygen
+                                   ,setThrusters: setThrusters
+                                   ,gravity: gravity};
+};
+Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
+   "use strict";
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values) return _elm.Main.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Keyboard = Elm.Keyboard.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Physics = Elm.Physics.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Set = Elm.Set.make(_elm),
+   $Shipupdate = Elm.Shipupdate.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Time = Elm.Time.make(_elm),
+   $Types = Elm.Types.make(_elm),
+   $View = Elm.View.make(_elm),
+   $Window = Elm.Window.make(_elm);
+   var _op = {};
+   var input = function () {
+      var d = A2($Signal.map,function (t) {    return t / 120;},$Time.fps(30));
+      return A2($Signal.sampleOn,d,A3($Signal.map2,F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),d,$Keyboard.keysDown));
+   }();
+   var update = F2(function (_p0,s) {
+      var _p1 = _p0;
+      var _p2 = _p1._0;
+      return A2($Physics.physics,
+      _p2,
+      A2($Shipupdate.oxygen,_p2,$Shipupdate.fuel($Shipupdate.thrust($Shipupdate.weight(A2($Shipupdate.setThrusters,_p1._1,s))))));
+   });
    var main = A3($Signal.map2,$View.view,$Window.dimensions,A3($Signal.foldp,update,$Types.frege,input));
-   return _elm.Main.values = {_op: _op
-                             ,keyPressed: keyPressed
-                             ,setThrusters: setThrusters
-                             ,thrust: thrust
-                             ,gravity: gravity
-                             ,update: update
-                             ,main: main
-                             ,input: input};
+   return _elm.Main.values = {_op: _op,update: update,main: main,input: input};
 };

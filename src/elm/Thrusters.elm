@@ -27,15 +27,18 @@ deltaY s =
     t  = s.thrusters
     c' = cos (degrees s.a)
     s' = sin (degrees s.a)
+    b  = boost t.boost
   in
-    ( (  mainPower * c' * tf t.main)       -- Main
-    + (  weakPower * c' * tf t.leftBack)   -- left back
-    + ( -weakPower * c' * tf t.leftFront)  -- left front
-    + (  weakPower * c' * tf t.rightBack)  -- right back
-    + ( -weakPower * c' * tf t.rightFront) -- right front
-    + ( -weakPower * s' * tf t.leftSide)   -- left side
-    + (  weakPower * s' * tf t.rightSide)  -- right side
-    ) * boost t.boost
+    (*) b
+    <|List.foldr (+) 0
+      [  mainPower * c' * tf t.main
+      ,  weakPower * c' * tf t.leftBack  
+      , -weakPower * c' * tf t.leftFront 
+      ,  weakPower * c' * tf t.rightBack 
+      , -weakPower * c' * tf t.rightFront
+      , -weakPower * s' * tf t.leftSide   
+      ,  weakPower * s' * tf t.rightSide  
+      ]
 
 deltaX : Ship -> Float
 deltaX s = 
@@ -43,15 +46,19 @@ deltaX s =
     t  = s.thrusters
     c' = cos (degrees s.a)
     s' = sin (degrees s.a)
+    b  = boost t.boost
   in
-    ( ( -mainPower * s' * tf t.main)       -- Main
-    + ( -weakPower * s' * tf t.leftBack)   -- left back
-    + (  weakPower * s' * tf t.leftFront)  -- left front
-    + ( -weakPower * s' * tf t.rightBack)  -- right back
-    + (  weakPower * s' * tf t.rightFront) -- right front
-    + ( -weakPower * c' * tf t.leftSide)   -- left side
-    + (  weakPower * c' * tf t.rightSide)  -- right side
-    ) * boost t.boost
+    (*) b 
+    <|List.foldr (+) 0   
+    [ -mainPower * s' * tf t.main
+    , -weakPower * s' * tf t.leftBack
+    ,  weakPower * s' * tf t.leftFront
+    , -weakPower * s' * tf t.rightBack
+    ,  weakPower * s' * tf t.rightFront
+    , -weakPower * c' * tf t.leftSide
+    ,  weakPower * c' * tf t.rightSide
+    ]
+
 
 deltaAngular : Ship -> Float
 deltaAngular s =

@@ -4,13 +4,8 @@ import Color            exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
 import List             exposing (..)
-import Root             exposing (root)
 import Types            exposing (Ship)
-
-
-src : String -> String
-src str =
-  root ++ str ++ ".png"
+import Source           exposing (src)
 
 imager : Int -> Int -> String -> Form
 imager w h str =
@@ -98,7 +93,7 @@ rightSide firing boost =
   in
     if firing >= 1 then
     [ drawStrafer blast
-      |> move (-23, -1)
+      |>move (-23, -1)
     ]
     else []
 
@@ -139,10 +134,9 @@ drawLander : Ship -> Form
 drawLander s =
   let
     t = s.thrusters
-  in
-    toForm
-    <|collage 138 138
-      <|List.foldr append []
+
+    lander =
+      if s.fuel > 0 then
         [ rightSide    t.rightSide  t.boost
         , leftSide     t.leftSide   t.boost
         , rightBack    t.rightBack  t.boost
@@ -150,8 +144,14 @@ drawLander s =
         , rightFront   t.rightFront t.boost
         , leftFront    t.leftFront  t.boost
         , mainThruster t.main       t.boost
-        , [ imager 47 48 "./lander.png" ]
+        , [ imager 47 48 (src "lander") ]
         ]
+      else
+        [ [ imager 47 48 (src "lander") ] ]
+  in
+    toForm
+    <|collage 138 138
+    <|foldr append [] lander
 
 
 
