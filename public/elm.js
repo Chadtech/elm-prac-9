@@ -10933,6 +10933,7 @@ Elm.HUD.make = function (_elm) {
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
+   $Source = Elm.Source.make(_elm),
    $String = Elm.String.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
@@ -10992,7 +10993,7 @@ Elm.HUD.make = function (_elm) {
                                            ,A2(_op["."],"padding","1em")
                                            ,A2(_op["."],"width","156px")
                                            ,A2(_op["."],"height","131px")]))]),
-   _U.list([$Html.fromElement(A3($Graphics$Element.image,156,131,"./key_diagram.png"))]))));
+   _U.list([$Html.fromElement(A3($Graphics$Element.image,156,131,$Source.src("key_diagram")))]))));
    return _elm.HUD.values = {_op: _op,cut: cut,nf: nf,pf: pf,round$: round$,readOut: readOut,point: point,hud: hud,keys: keys};
 };
 Elm.Minimap = Elm.Minimap || {};

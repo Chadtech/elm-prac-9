@@ -3,12 +3,13 @@ module HUD where
 import Graphics.Collage exposing (collage, toForm, Form, move)
 import Graphics.Element exposing (..)
 import Html             exposing (..)
-import Html.Attributes  exposing (..)
+import Html.Attributes  exposing (style, class)
 import Types            exposing (Ship)
 import String
 import List             exposing (unzip, map)
 import String           exposing (slice)
 import Csscolors        exposing (..)
+import Source           exposing (src)
 
 (.) = (,)
 
@@ -97,7 +98,7 @@ keys =
     , "height"           . "131px"
     ] 
   ]
-  [ "./key_diagram.png"
+  [ src "key_diagram"
     |>image 156 131
     |>fromElement
   ]
