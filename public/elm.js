@@ -10765,7 +10765,7 @@ Elm.Source.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var root = "https://raw.githubusercontent.com/Chadtech/elm-prac-9/master/public/";
+   var root = "./";
    var src = function (str) {    return A2($Basics._op["++"],root,A2($Basics._op["++"],str,".png"));};
    return _elm.Source.values = {_op: _op,root: root,src: src};
 };
@@ -10937,11 +10937,26 @@ Elm.HUD.make = function (_elm) {
    $String = Elm.String.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
+   _op["."] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
+   var point = function (str) {
+      return A2($Html.p,_U.list([$Html$Attributes.$class("point"),$Html$Attributes.style(_U.list([A2(_op["."],"width","110px")]))]),_U.list([$Html.text(str)]));
+   };
+   var keys = $Graphics$Collage.toForm(A3($Html.toElement,
+   0,
+   0,
+   A2($Html.div,
+   _U.list([$Html$Attributes.style(_U.list([A2(_op["."],"background-color",$Csscolors.backgroundColor)
+                                           ,A2(_op["."],"border-style","solid")
+                                           ,A2(_op["."],"border-width","2px")
+                                           ,A2(_op["."],"border-color",$Csscolors.pointColor)
+                                           ,A2(_op["."],"padding","1em")
+                                           ,A2(_op["."],"width","156px")
+                                           ,A2(_op["."],"height","131px")]))]),
+   _U.list([$Html.fromElement(A3($Graphics$Element.image,156,131,$Source.src("key_diagram")))]))));
    var round$ = function (f) {    return $Basics.toFloat($Basics.round(f * 10)) / 10;};
    var cut = F2(function (limit,str) {    return _U.cmp($String.length(str),limit) > 0 ? A3($String.slice,0,limit,str) : str;});
    var nf = function (f) {    return A2(cut,8,$Basics.toString(f));};
    var pf = F2(function (t,p) {    return nf((p + 250 + $Basics.toFloat(t) * 500) / 10);});
-   _op["."] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
    var readOut = function (s) {
       return $List.unzip(_U.list([A2(_op["."],"--------","--------")
                                  ,A2(_op["."],"STATUS","NOMINAL")
@@ -10956,9 +10971,6 @@ Elm.HUD.make = function (_elm) {
                                  ,A2(_op["."],"FUEL",A2($Basics._op["++"],A2(cut,6,$Basics.toString(round$(s.fuel))),"l"))
                                  ,A2(_op["."],"OXYGEN",A2($Basics._op["++"],A2(cut,6,$Basics.toString($Basics.round(s.oxygen))),"l"))
                                  ,A2(_op["."],"WEIGHT",A2($Basics._op["++"],A2(cut,6,$Basics.toString($Basics.round(s.weight)))," yH"))]));
-   };
-   var point = function (str) {
-      return A2($Html.p,_U.list([$Html$Attributes.$class("point"),$Html$Attributes.style(_U.list([A2(_op["."],"width","110px")]))]),_U.list([$Html.text(str)]));
    };
    var hud = function (s) {
       var colStyle = _U.list([$Html$Attributes.style(_U.list([A2(_op["."],"float","left")]))]);
@@ -10982,18 +10994,6 @@ Elm.HUD.make = function (_elm) {
               ,A2($Html.div,colStyle,A2($List.map,point,keys))
               ,A2($Html.div,colStyle,A2($List.map,point,values))])))));
    };
-   var keys = $Graphics$Collage.toForm(A3($Html.toElement,
-   0,
-   0,
-   A2($Html.div,
-   _U.list([$Html$Attributes.style(_U.list([A2(_op["."],"background-color",$Csscolors.backgroundColor)
-                                           ,A2(_op["."],"border-style","solid")
-                                           ,A2(_op["."],"border-width","2px")
-                                           ,A2(_op["."],"border-color",$Csscolors.pointColor)
-                                           ,A2(_op["."],"padding","1em")
-                                           ,A2(_op["."],"width","156px")
-                                           ,A2(_op["."],"height","131px")]))]),
-   _U.list([$Html.fromElement(A3($Graphics$Element.image,156,131,$Source.src("key_diagram")))]))));
    return _elm.HUD.values = {_op: _op,cut: cut,nf: nf,pf: pf,round$: round$,readOut: readOut,point: point,hud: hud,keys: keys};
 };
 Elm.Minimap = Elm.Minimap || {};

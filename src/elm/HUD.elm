@@ -11,7 +11,7 @@ import String           exposing (slice)
 import Csscolors        exposing (..)
 import Source           exposing (src)
 
-(.) = (,)
+
 
 cut : Int -> String -> String
 cut limit str =
@@ -32,6 +32,8 @@ round' : Float -> Float
 round' f =
   (toFloat (round (f * 10))) / 10
 
+(.) = (,)
+
 readOut : Ship -> (List String, List String)
 readOut s =
   unzip
@@ -40,6 +42,7 @@ readOut s =
   , "--------"  . "--------"
   , "ang vel "  . nf -(s.va * 10)
   , "velocity"  . nf ((((s.vx ^ 2) + (s.vy ^ 2)) ^ 0.5)/10)
+  --, "dir"       . nf ((s.vx / s.vy) / (((s.vx ^ 2) + (s.vy ^ 2)) ^ 0.5))
   , "position"  . "--------"
   , ": angle"   . nf -(s.a / 0.9)
   , ": x"       . pf s.tileX s.x
